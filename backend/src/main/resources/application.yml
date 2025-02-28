@@ -1,0 +1,68 @@
+# Application configuration
+spring:
+  # Profile configuration
+  profiles:
+    active: dev
+  
+  # Application name
+  application:
+    name: fee-system
+  
+  # Jackson configuration
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  
+  # Servlet configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  
+  # JPA configuration
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: GMT+8
+
+# Server configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  tomcat:
+    max-threads: 800
+    min-spare-threads: 30
+
+# JWT configuration
+jwt:
+  secret: M9WrJnHxVJF7Fpx2JFkpY8TgPGNsJyMH8fZpTkXmYgB7DrAbC5
+  expiration: 86400 # 24 hours in seconds
+  header: Authorization
+  token-prefix: "Bearer "
+
+# Application specific configuration
+app:
+  # CORS configuration
+  cors:
+    allowed-origins: http://localhost:5174/,http://localhost:8080 # Add more origins as needed
+    allowed-methods: GET, POST, PUT, DELETE, OPTIONS
+    allowed-headers: Authorization, Content-Type, X-Requested-With
+    max-age: 3600
+  
+  # Password policy
+  password:
+    min-length: 6
+    require-uppercase: false
+    require-lowercase: false
+    require-digit: false
+    require-special-char: false
+  
+  # Login policy
+  login:
+    max-attempts: 5
+    lock-duration: 300 # 5 minutes in seconds
