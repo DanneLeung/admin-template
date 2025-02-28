@@ -43,7 +43,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { Fold, Expand, FullScreen, CaretBottom } from '@element-plus/icons-vue'
-import { useUserStore } from '../../store/user'
+import { useUserStore } from '@/store/user'
 
 const router = useRouter()
 const userStore = useUserStore()

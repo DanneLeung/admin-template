@@ -95,8 +95,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="roleForm.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio :value="0">正常</el-radio>
+            <el-radio :value="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -142,7 +142,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getRoleList, createRole, updateRole, deleteRole, batchDeleteRoles, updateRoleStatus, assignRolePermissions } from '../../..//api/system/role'
+import { getRoleList, createRole, updateRole, deleteRole, batchDeleteRoles, updateRoleStatus, assignRolePermissions } from '@/api/system/role'
 
 // Data
 const loading = ref(false)
@@ -209,7 +209,7 @@ const getList = async () => {
   loading.value = true
   try {
     const res = await getRoleList(queryParams)
-    roleList.value = res.data.list
+    roleList.value = res.data.content
     total.value = res.data.total
   } catch (error) {
     ElMessage.error('获取角色列表失败')
@@ -296,6 +296,53 @@ const resetForm = () => {
     status: 0,
     remark: ''
   })
+}
+
+const handleEdit = (row) => {
+  dialog.type = 'edit'
+  dialog.title = '编辑角色'
+  dialog.visible = true
+  Object.assign(roleForm, row)
+}
+
+const handlePermission = async (row) => {
+  permissionDialog.visible = true
+  permissionDialog.roleId = row.id
+  permissionForm.roleId = row.id
+  permissionForm.permissionIds = row.permissionIds || []
+}
+
+const handleSelectionChange = (selection) => {
+  selectedRoles.value = selection
+}
+
+const handleQuery = () => {
+  queryParams.pageNum = 1
+  getList()
+}
+
+const resetQuery = () => {
+  queryParams.pageNum = 1
+  queryParams.name = ''
+  queryParams.status = null
+  getList()
+}
+
+const handleAdd = () => {
+  dialog.type = 'add'
+  dialog.title = '新增角色'
+  dialog.visible = true
+  resetForm()
+}
+
+const handleSizeChange = (val) => {
+  queryParams.pageSize = val
+  getList()
+}
+
+const handleCurrentChange = (val) => {
+  queryParams.pageNum = val
+  getList()
 }
 
 // Initialize

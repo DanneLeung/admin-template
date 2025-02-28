@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getToken } from './auth'
-import { useUserStore } from '../store/user'
+import { useUserStore } from '@/store/user'
 
 // 创建axios实例
 const service = axios.create({

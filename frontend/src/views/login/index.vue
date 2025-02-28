@@ -48,7 +48,7 @@ import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
-import { useUserStore } from '../../store/user'
+import { useUserStore } from '@/store/user'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -96,7 +96,14 @@ const handleLogin = async () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #667eea;
+  background-image: 
+    linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
+    url('https://images.unsplash.com/photo-1557683311-eac922347aa1?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  background-position: 0 0, 10px 10px, 0 0;
 }
 
 .login-box {

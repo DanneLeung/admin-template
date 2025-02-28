@@ -11,9 +11,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableCaching
 @EnableAsync
-public class FeeSystemApplication {
+public class AdminApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FeeSystemApplication.class, args);
+        SpringApplication.run(AdminApiApplication.class, args);
     }
 }

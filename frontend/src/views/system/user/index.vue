@@ -119,8 +119,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="userForm.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio :value="0">正常</el-radio>
+            <el-radio :value="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -164,7 +164,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getUserList, createUser, updateUser, deleteUser, batchDeleteUsers, updateUserStatus, assignUserRoles } from '../../../api/system/user'
+import { getUserList, createUser, updateUser, deleteUser, batchDeleteUsers, updateUserStatus, assignUserRoles } from '@/api/system/user'
 
 // Data
 const loading = ref(false)

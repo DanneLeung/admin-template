@@ -1,7 +1,7 @@
 // src/store/user.js
 import { defineStore } from 'pinia'
-import { getToken, setToken, removeToken } from '../utils/auth'
-import { login, logout, getUserInfo } from '../api/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, logout, getUserInfo } from '@/api/user'
 import { generateAsyncRoutes } from '../router'
 import { ElMessage } from 'element-plus'
 

@@ -98,7 +98,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '../../store/user'
+import { useUserStore } from '@/store/user'
 
 const userStore = useUserStore()
 

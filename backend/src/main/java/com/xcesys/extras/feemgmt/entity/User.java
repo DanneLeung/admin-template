@@ -75,7 +75,7 @@ public class User extends BaseEntity {
      * 用户性别（0男 1女 2未知）
      */
     @Column(name = "gender")
-    private Integer gender;
+    private Integer gender = 2;
 
     /**
      * 头像地址

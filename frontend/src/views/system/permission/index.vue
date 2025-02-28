@@ -119,8 +119,8 @@
         </el-form-item>
         <el-form-item label="权限状态" prop="status">
           <el-radio-group v-model="permissionForm.status">
-            <el-radio :label="0">启用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
+            <el-radio :value="0">启用</el-radio>
+            <el-radio :value="1">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -137,7 +137,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUserStore } from '../../../store/user'
+import { useUserStore } from '../@/store/user'
 import { getPermissionList, createPermission, updatePermission, deletePermission, batchDeletePermissions, updatePermissionStatus } from '@/api/system/permission'
 
 // Store
@@ -191,7 +191,7 @@ const getList = async () => {
   loading.value = true
   try {
     const res = await getPermissionList(queryParams)
-    permissionList.value = res.data.list
+    permissionList.value = res.data.content
     total.value = res.data.total
   } catch (error) {
     ElMessage.error('获取权限列表失败')

@@ -1,8 +1,8 @@
-import request from '../../utils/request'
+import request from '@/utils/request'
 
 // Role API endpoints
 const roleApi = {
-  list: '/role/list',
+  list: '/role',
   detail: '/role/',
   create: '/role',
   update: '/role',
@@ -41,7 +41,7 @@ export function createRole(data) {
 // Update role
 export function updateRole(data) {
   return request({
-    url: roleApi.update,
+    url: roleApi.update + `/${data.id}`,
     method: 'put',
     data
   })

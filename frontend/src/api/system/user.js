@@ -1,4 +1,4 @@
-import request from '../../utils/request'
+import request from '@/utils/request'
 
 // User API endpoints
 const userApi = {
@@ -41,7 +41,7 @@ export function createUser(data) {
 // Update user
 export function updateUser(data) {
   return request({
-    url: userApi.update,
+    url: userApi.update + `/${data.id}`,
     method: 'put',
     data
   })

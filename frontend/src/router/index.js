@@ -10,7 +10,7 @@ export const constantRoutes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/login/index.vue'),
+    component: () => import('@/views/login/index.vue'),
     meta: { title: '登录', hidden: true }
   },
   {
@@ -24,7 +24,7 @@ export const constantRoutes = [
       {
         path: '',
         name: 'Dashboard',
-        component: () => import('../views/dashboard/index.vue'),
+        component: () => import('@/views/dashboard/index.vue'),
         meta: { title: '仪表盘' }
       }
     ]
@@ -36,7 +36,7 @@ export const constantRoutes = [
       {
         path: '',
         name: 'Profile',
-        component: () => import('../views/profile/index.vue'),
+        component: () => import('@/views/profile/index.vue'),
         meta: { title: '个人中心' ,hidden: true}
       }
     ]
@@ -44,7 +44,7 @@ export const constantRoutes = [
   {
     path: '/404',
     name: '404',
-    component: () => import('../views/error/404.vue'),
+    component: () => import('@/views/error/404.vue'),
     meta: { hidden: true }
   },
 ]

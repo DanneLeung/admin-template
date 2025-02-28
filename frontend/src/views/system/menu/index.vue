@@ -96,9 +96,9 @@
         </el-form-item>
         <el-form-item label="菜单类型">
           <el-radio-group v-model="menuForm.type">
-            <el-radio :label="0">目录</el-radio>
-            <el-radio :label="1">菜单</el-radio>
-            <el-radio :label="2">按钮</el-radio>
+            <el-radio :value="0">目录</el-radio>
+            <el-radio :value="1">菜单</el-radio>
+            <el-radio :value="2">按钮</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单名称" prop="name">
@@ -121,8 +121,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="menuForm.status">
-            <el-radio :label="0">显示</el-radio>
-            <el-radio :label="1">隐藏</el-radio>
+            <el-radio :value="0">显示</el-radio>
+            <el-radio :value="1">隐藏</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -196,7 +196,7 @@ const getList = async () => {
   loading.value = true
   try {
     const res = await getMenuList(queryParams)
-    menuList.value = res.data.list
+    menuList.value = res.data.content
   } catch (error) {
     ElMessage.error('获取菜单列表失败')
   } finally {

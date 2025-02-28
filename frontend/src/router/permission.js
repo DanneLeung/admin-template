@@ -1,4 +1,4 @@
-import Layout from '../layout/index.vue'
+import Layout from '@/layout/index.vue'
 // 动态路由配置
 export const asyncRoutes = [
   {
@@ -10,25 +10,25 @@ export const asyncRoutes = [
       {
         path: 'user',
         name: 'User',
-        component: () => import('../views/system/user/index.vue'),
+        component: () => import('@/views/system/user/index.vue'),
         meta: { title: '用户管理', permissions: ['system:user:list'] }
       },
       {
         path: 'role',
         name: 'Role',
-        component: () => import('../views/system/role/index.vue'),
+        component: () => import('@/views/system/role/index.vue'),
         meta: { title: '角色管理', permissions: ['system:role:list'] }
       },
       {
         path: 'menu',
         name: 'Menu',
-        component: () => import('../views/system/menu/index.vue'),
+        component: () => import('@/views/system/menu/index.vue'),
         meta: { title: '菜单管理', permissions: ['system:menu:list'] }
       },
       {
         path: 'permission',
         name: 'Permission',
-        component: () => import('../views/system/permission/index.vue'),
+        component: () => import('@/views/system/permission/index.vue'),
         meta: { title: '权限管理', permissions: ['system:permission:list'] }
       }
     ]

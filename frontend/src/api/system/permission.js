@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 // Permission API endpoints
 const permissionApi = {
-  list: '/permission/list',
+  list: '/permission',
   detail: '/permission/',
   create: '/permission',
   update: '/permission',

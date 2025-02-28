@@ -1,7 +1,7 @@
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { useUserStore } from '../store/user'
-import { getToken } from '../utils/auth'
+import { useUserStore } from '@/store/user'
+import { getToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 

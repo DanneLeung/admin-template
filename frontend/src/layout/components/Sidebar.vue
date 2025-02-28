@@ -31,7 +31,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '../../store/user'
+import { useUserStore } from '@/store/user'
 import SidebarItem from './SidebarItem.vue'
 
 const route = useRoute()

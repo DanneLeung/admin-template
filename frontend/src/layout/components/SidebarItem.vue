@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { isExternal } from '../../utils'
+import { isExternal } from '@/utils'
 import AppLink from './AppLink.vue'
 
 const props = defineProps({

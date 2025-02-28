@@ -6,7 +6,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { isExternal } from '../../utils'
+import { isExternal } from '@/utils'
 
 const props = defineProps({
   to: {
