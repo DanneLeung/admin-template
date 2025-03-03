@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 // Menu API endpoints
 const menuApi = {
-  list: '/menu',
+  list: '/menu/tree',
   detail: '/menu/',
   create: '/menu',
   update: '/menu',

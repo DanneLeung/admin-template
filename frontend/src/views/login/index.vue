@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-box">
       <div class="login-header">
-        <h2>费用管理系统</h2>
+        <h2>Admin Template</h2>
       </div>
       <div class="login-form">
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules">

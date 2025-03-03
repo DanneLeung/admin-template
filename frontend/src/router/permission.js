@@ -8,6 +8,12 @@ export const asyncRoutes = [
     meta: { title: '系统管理', icon: 'setting' },
     children: [
       {
+        path: 'company',
+        name: 'Company',
+        component: () => import('@/views/system/company/index.vue'),
+        meta: { title: '公司管理', permissions: ['system:company:list'] }
+      },
+      {
         path: 'user',
         name: 'User',
         component: () => import('@/views/system/user/index.vue'),

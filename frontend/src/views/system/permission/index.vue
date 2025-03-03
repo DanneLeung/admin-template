@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="">
     <!-- Search and Filter Section -->
     <el-card class="filter-container">
       <el-form :inline="true" :model="queryParams" @submit.prevent>
@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="权限标识">
           <el-input
-            v-model="queryParams.permission"
+            v-model="queryParams.code"
             placeholder="请输入权限标识"
             clearable
             @keyup.enter="handleQuery"
@@ -53,7 +53,7 @@
       >
         <el-table-column type="index" label="序号" width="50" />
         <el-table-column prop="name" label="权限名称" />
-        <el-table-column prop="permission" label="权限标识" />
+        <el-table-column prop="code" label="权限标识" />
         <el-table-column prop="description" label="权限描述" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
@@ -107,8 +107,8 @@
         <el-form-item label="权限名称" prop="name">
           <el-input v-model="permissionForm.name" placeholder="请输入权限名称" />
         </el-form-item>
-        <el-form-item label="权限标识" prop="permission">
-          <el-input v-model="permissionForm.permission" placeholder="请输入权限标识" />
+        <el-form-item label="权限标识" prop="code">
+          <el-input v-model="permissionForm.code" placeholder="请输入权限标识" />
         </el-form-item>
         <el-form-item label="权限描述" prop="description">
           <el-input
@@ -137,7 +137,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUserStore } from '../@/store/user'
+import { useUserStore } from '@/store/user'
 import { getPermissionList, createPermission, updatePermission, deletePermission, batchDeletePermissions, updatePermissionStatus } from '@/api/system/permission'
 
 // Store
@@ -154,7 +154,7 @@ const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
   name: '',
-  permission: '',
+  code: '',
   status: null
 })
 
@@ -170,7 +170,7 @@ const permissionFormRef = ref(null)
 const permissionForm = reactive({
   id: null,
   name: '',
-  permission: '',
+  code: '',
   description: '',
   status: 0
 })
@@ -181,7 +181,7 @@ const permissionRules = {
     { required: true, message: '请输入权限名称', trigger: 'blur' },
     { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
   ],
-  permission: [
+  code: [
     { required: true, message: '请输入权限标识', trigger: 'blur' }
   ]
 }
@@ -207,36 +207,9 @@ const handleQuery = () => {
 
 const resetQuery = () => {
   queryParams.name = ''
-  queryParams.permission = ''
+  queryParams.code = ''
   queryParams.status = null
   handleQuery()
-}
-
-const handleAdd = () => {
-  dialog.type = 'add'
-  dialog.title = '添加权限'
-  dialog.visible = true
-}
-
-const handleEdit = (row) => {
-  dialog.type = 'edit'
-  dialog.title = '编辑权限'
-  dialog.visible = true
-  Object.assign(permissionForm, row)
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该权限吗？', '警告', {
-    type: 'warning'
-  }).then(async () => {
-    try {
-      await deletePermission(row.id)
-      ElMessage.success('删除成功')
-      getList()
-    } catch (error) {
-      ElMessage.error('删除失败')
-    }
-  })
 }
 
 const handleSubmit = async () => {
@@ -270,7 +243,7 @@ const handleCurrentChange = (val) => {
 const resetForm = () => {
   permissionForm.id = null
   permissionForm.name = ''
-  permissionForm.permission = ''
+  permissionForm.code = ''
   permissionForm.description = ''
   permissionForm.status = 0
 }
@@ -329,9 +302,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.app-container {
-  padding: 20px;
-}
 
 .filter-container {
   margin-bottom: 20px;

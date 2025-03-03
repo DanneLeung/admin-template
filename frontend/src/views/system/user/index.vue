@@ -1,7 +1,7 @@
 <template>
-  <div class="user-container">
+  <div class="">
     <!-- Search and Action Bar -->
-    <div class="action-bar">
+    <el-card class="mb-4">
       <el-form :inline="true" :model="queryParams" class="search-form">
         <el-form-item label="关键字">
           <el-input
@@ -35,10 +35,11 @@
         <el-button type="primary" @click="handleAdd">新增用户</el-button>
         <el-button type="danger" :disabled="!selectedUsers.length" @click="handleBatchDelete">批量删除</el-button>
       </div>
-    </div>
+    </el-card>
+    <el-card>
 
     <!-- User Table -->
-    <el-table
+      <el-table
       v-loading="loading"
       :data="userList"
       @selection-change="handleSelectionChange"
@@ -66,7 +67,8 @@
           <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+      </el-table>
+    </el-card>
 
     <!-- Pagination -->
     <div class="pagination-container">

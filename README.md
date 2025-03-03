@@ -1,8 +1,8 @@
-# Expense Management System
+# Admin template
 
 ## Project Overview
 
-This is a modern expense management system built with Vue 3 (Frontend) and Spring Boot (Backend), featuring user authentication, role-based access control, and comprehensive expense tracking capabilities.
+This is a modern admin template built with Vue 3 (Frontend) and Spring Boot (Backend), featuring user authentication, role-based access control.
 
 ## Architecture
 

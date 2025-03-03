@@ -63,6 +63,7 @@ public class JwtTokenProvider {
     return Jwts.builder()
         .setSubject(userPrincipal.getUsername())
         .claim("id", userPrincipal.getId())
+        .claim("companyId", userPrincipal.getCompanyId())
         .claim("authorities", authorities)
         .setIssuedAt(now)
         .setExpiration(expiryDate)
@@ -121,7 +122,8 @@ public class JwtTokenProvider {
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-    UserDetails principal = new UserDetailsImpl((Long.valueOf(claims.get("id").toString())), claims.getSubject(), "", 0, authorities);
+    Long companyId = claims.containsKey("companyId") ? Long.valueOf(claims.get("companyId").toString()) : null;
+    UserDetails principal = new UserDetailsImpl((Long.valueOf(claims.get("id").toString())), claims.getSubject(), "", 0, companyId, authorities);
 
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }

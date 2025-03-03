@@ -27,9 +27,10 @@ public class MenuController {
      *
      * @return 菜单树结构
      */
-    @GetMapping("/tree")
+    @GetMapping({"/tree", "list"})
     @PreAuthorize("hasAuthority('system:menu:list')")
     public Result<List<Menu>> getMenuTree() {
+
         List<Menu> menuTree = menuService.findMenuTree();
         return Result.success(menuTree);
     }

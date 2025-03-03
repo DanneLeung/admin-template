@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import { setupRouterGuard } from './guard'
 import { asyncRoutes,generateAsyncRoutes } from './permission'
 import Layout from '../layout/index.vue'
@@ -32,12 +30,13 @@ export const constantRoutes = [
   {
     path: '/profile',
     component: Layout,
+    meta: { hidden: true },
     children: [
       {
         path: '',
         name: 'Profile',
         component: () => import('@/views/profile/index.vue'),
-        meta: { title: '个人中心' ,hidden: true}
+        meta: { title: '个人中心' , hidden: true}
       }
     ]
   },

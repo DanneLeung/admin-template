@@ -1,13 +1,6 @@
 package com.xcesys.extras.feemgmt.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -31,73 +24,74 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE sys_department SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Department extends BaseEntity {
+public class Department extends TenantBaseEntity {
 
-    /**
-     * 部门名称
-     */
-    @NotBlank(message = "部门名称不能为空")
-    @Size(max = 50, message = "部门名称长度不能超过50个字符")
-    @Column(name = "name", nullable = false)
-    private String name;
+  /**
+   * 部门名称
+   */
+  @NotBlank(message = "部门名称不能为空")
+  @Size(max = 50, message = "部门名称长度不能超过50个字符")
+  @Column(name = "name", nullable = false)
+  private String name;
 
-    /**
-     * 父部门ID
-     */
-    @Column(name = "parent_id")
-    private Long parentId;
+  /**
+   * 父部门ID
+   */
+  @Column(name = "parent_id")
+  private Long parentId;
 
-    /**
-     * 显示顺序
-     */
-    @Column(name = "sort")
-    private Integer sort;
+  /**
+   * 显示顺序
+   */
+  @Column(name = "sort")
+  private Integer sort;
 
-    /**
-     * 负责人
-     */
-    @Size(max = 20, message = "负责人长度不能超过20个字符")
-    @Column(name = "leader")
-    private String leader;
+  /**
+   * 负责人
+   */
+  @Size(max = 20, message = "负责人长度不能超过20个字符")
+  @Column(name = "leader")
+  private String leader;
 
-    /**
-     * 联系电话
-     */
-    @Pattern(regexp = "^1[3-9]\\d{9}$", message = "联系电话格式不正确")
-    @Column(name = "phone")
-    private String phone;
+  /**
+   * 联系电话
+   */
+  @Pattern(regexp = "^1[3-9]\\d{9}$", message = "联系电话格式不正确")
+  @Column(name = "phone")
+  private String phone;
 
-    /**
-     * 邮箱
-     */
-    @Email(message = "邮箱格式不正确")
-    @Size(max = 50, message = "邮箱长度不能超过50个字符")
-    @Column(name = "email")
-    private String email;
+  /**
+   * 邮箱
+   */
+  @Email(message = "邮箱格式不正确")
+  @Size(max = 50, message = "邮箱长度不能超过50个字符")
+  @Column(name = "email")
+  private String email;
 
-    /**
-     * 部门状态（0正常 1停用）
-     */
-    @Column(name = "status", nullable = false)
-    private Integer status = 0;
+  /**
+   * 部门状态（0正常 1停用）
+   */
+  @Column(name = "status", nullable = false)
+  private Integer status = 0;
 
-    /**
-     * 父部门
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
-    private Department parent;
+  /**
+   * 父部门
+   */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+  private Department parent;
 
-    /**
-     * 子部门
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    @OrderBy("sort asc")
-    private List<Department> children = new ArrayList<>();
+  /**
+   * 子部门
+   */
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+  @OrderBy("sort asc")
+  private List<Department> children = new ArrayList<>();
 
-    /**
-     * 部门下的用户
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
-    private List<User> users = new ArrayList<>();
+  /**
+   * 部门下的用户
+   */
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
+  private List<User> users = new ArrayList<>();
+
 }

@@ -18,7 +18,7 @@ export function setupRouterGuard(router) {
       NProgress.start()
       
       // 设置页面标题
-      const title = to.meta.title ? `${to.meta.title} - 费用管理系统` : '费用管理系统'
+      const title = to.meta.title ? `${to.meta.title} - Admin Template` : 'Admin Template'
       document.title = title
       
       // 处理已登录状态

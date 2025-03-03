@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 /**
  * Spring Security用户详情实现类
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
   @Serial
   private static final long serialVersionUID = 1L;
@@ -29,6 +29,7 @@ public class UserDetailsImpl implements UserDetails {
   @JsonIgnore
   private String password;
   private Integer status;
+  private Long companyId;
   private Collection<? extends GrantedAuthority> authorities;
 
   /**
@@ -48,6 +49,7 @@ public class UserDetailsImpl implements UserDetails {
         user.getUsername(),
         user.getPassword(),
         user.getStatus(),
+        user.getCompanyId(),
         authorities);
   }
 

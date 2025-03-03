@@ -2,7 +2,7 @@
   <div class="sidebar">
     <div class="logo-container">
       <router-link to="/">
-        <h1 class="logo-text">费用管理系统</h1>
+        <h1 class="logo-text">Admin Template</h1>
       </router-link>
     </div>
 

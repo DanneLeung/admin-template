@@ -9,20 +9,20 @@ import { useRoute } from 'vue-router';
 import { ref, watch, onMounted } from 'vue';
 
 const route = useRoute();
-const title = ref('费用管理系统');
+const title = ref('Admin Template');
 
 // 监听路由变化更新标题
 watch(
   () => route.meta.title,
   (newTitle) => {
-    title.value = newTitle ? `${newTitle} - 费用管理系统` : '费用管理系统';
+    title.value = newTitle ? `${newTitle} - Admin Template` : 'Admin Template';
     document.title = title.value;
   }
 );
 
 onMounted(() => {
   // 初始化标题
-  document.title = route.meta.title ? `${route.meta.title} - 费用管理系统` : '费用管理系统';
+  document.title = route.meta.title ? `${route.meta.title} - Admin Template` : 'Admin Template';
 });
 </script>
 

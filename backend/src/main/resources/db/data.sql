@@ -6,21 +6,30 @@ DELETE FROM sys_role;
 DELETE FROM sys_permission;
 
 -- 创建权限
-INSERT INTO sys_permission (id, name, code, type, status, create_time, update_time, deleted) VALUES
-(1, '用户查询', 'system:user:query', 1, 0, NOW(), NOW(), false),
-(2, '用户新增', 'system:user:add', 1, 0, NOW(), NOW(), false),
-(3, '用户编辑', 'system:user:edit', 1, 0, NOW(), NOW(), false),
-(4, '用户删除', 'system:user:remove', 1, 0, NOW(), NOW(), false),
-(5, '用户导出', 'system:user:export', 1, 0, NOW(), NOW(), false),
-(6, '重置密码', 'system:user:resetPwd', 1, 0, NOW(), NOW(), false),
-(7, '角色查询', 'system:role:query', 1, 0, NOW(), NOW(), false),
-(8, '角色新增', 'system:role:add', 1, 0, NOW(), NOW(), false),
-(9, '角色编辑', 'system:role:edit', 1, 0, NOW(), NOW(), false),
-(10, '角色删除', 'system:role:remove', 1, 0, NOW(), NOW(), false),
-(11, '菜单查询', 'system:menu:query', 1, 0, NOW(), NOW(), false),
-(12, '菜单新增', 'system:menu:add', 1, 0, NOW(), NOW(), false),
-(13, '菜单编辑', 'system:menu:edit', 1, 0, NOW(), NOW(), false),
-(14, '菜单删除', 'system:menu:remove', 1, 0, NOW(), NOW(), false);
+INSERT INTO sys_permission (name, code, type, status, create_time, update_time, deleted) VALUES
+('公司查询', 'system:company:list', 1, 0, NOW(), NOW(), false),
+('公司新增', 'system:company:add', 1, 0, NOW(), NOW(), false),
+('公司编辑', 'system:company:edit', 1, 0, NOW(), NOW(), false),
+('公司删除', 'system:company:remove', 1, 0, NOW(), NOW(), false),
+('用户查询', 'system:user:list', 1, 0, NOW(), NOW(), false),
+('用户新增', 'system:user:add', 1, 0, NOW(), NOW(), false),
+('用户编辑', 'system:user:edit', 1, 0, NOW(), NOW(), false),
+('用户删除', 'system:user:remove', 1, 0, NOW(), NOW(), false),
+('用户导出', 'system:user:export', 1, 0, NOW(), NOW(), false),
+('重置密码', 'system:user:resetPwd', 1, 0, NOW(), NOW(), false),
+('角色查询', 'system:role:list', 1, 0, NOW(), NOW(), false),
+('角色新增', 'system:role:add', 1, 0, NOW(), NOW(), false),
+('角色编辑', 'system:role:edit', 1, 0, NOW(), NOW(), false),
+('角色删除', 'system:role:remove', 1, 0, NOW(), NOW(), false),
+('菜单查询', 'system:menu:list', 1, 0, NOW(), NOW(), false),
+('菜单新增', 'system:menu:add', 1, 0, NOW(), NOW(), false),
+('菜单编辑', 'system:menu:edit', 1, 0, NOW(), NOW(), false),
+('菜单删除', 'system:menu:remove', 1, 0, NOW(), NOW(), false),
+('权限查询', 'system:permission:list', 1, 0, NOW(), NOW(), false),
+('权限新增', 'system:permission:add', 1, 0, NOW(), NOW(), false),
+('权限编辑', 'system:permission:edit', 1, 0, NOW(), NOW(), false),
+('权限删除', 'system:permission:remove', 1, 0, NOW(), NOW(), false)
+;
 
 -- 创建角色
 INSERT INTO sys_role (id, name, code, status, data_scope, create_time, update_time, deleted) VALUES

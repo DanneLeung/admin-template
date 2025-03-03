@@ -6,7 +6,7 @@ spring:
   
   # Application name
   application:
-    name: fee-system
+    name: admin-template
   
   # Jackson configuration
   jackson:

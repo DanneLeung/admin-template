@@ -32,4 +32,4 @@ app.config.globalProperties.$ELEMENT = { size: 'medium' }
 // 挂载应用
 app.mount('#app')
 
-console.log('费用管理系统启动成功')
+console.log('Admin Template启动成功')

@@ -13,6 +13,8 @@ import java.util.Set;
  */
 public interface PermissionService {
 
+    void deleteAll(List<Long> ids);
+
     /**
      * 根据ID查询权限
      *
@@ -44,7 +46,7 @@ public interface PermissionService {
      *
      * @return 权限列表
      */
-    List<Permission> findAllPermissions();
+    Page<Permission> findAllPermissions(Pageable pageable);
 
     /**
      * 根据类型查询权限列表
