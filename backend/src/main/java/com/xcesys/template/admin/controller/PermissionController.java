@@ -1,7 +1,9 @@
 package com.xcesys.template.admin.controller;
 
 import com.xcesys.template.admin.common.Result;
+import com.xcesys.template.admin.dto.PermissionDto;
 import com.xcesys.template.admin.entity.Permission;
+import com.xcesys.template.admin.mapper.PermissionMapper;
 import com.xcesys.template.admin.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import java.util.List;
 public class PermissionController {
 
   private final PermissionService permissionService;
+  private final PermissionMapper permissionMapper;
 
   @GetMapping
   @PreAuthorize("hasAuthority('system:permission:list')")
@@ -32,14 +35,20 @@ public class PermissionController {
 
   @PostMapping
   @PreAuthorize("hasAuthority('system:permission:add')")
-  public Result<Permission> create(@RequestBody Permission permission) {
-    return Result.success(permissionService.updatePermission(permission));
+  public Result<PermissionDto> create(@RequestBody PermissionDto permissionDto) {
+    Permission permission = new Permission();
+    permissionMapper.toEntity(permission, permissionDto);
+    Permission updatedPermission = permissionService.updatePermission(permission);
+    return Result.success(permissionMapper.toDto(updatedPermission));
   }
 
-  @PutMapping
+  @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('system:permission:edit')")
-  public Result<Permission> update(@RequestBody Permission permission) {
-    return Result.success(permissionService.updatePermission(permission));
+  public Result<PermissionDto> update(@PathVariable Long id, @RequestBody PermissionDto permissionDto) {
+    Permission permission = permissionService.findById(id);
+    permissionMapper.toEntity(permission, permissionDto);
+    Permission updatedPermission = permissionService.updatePermission(permission);
+    return Result.success(permissionMapper.toDto(updatedPermission));
   }
 
   @DeleteMapping("/{id}")

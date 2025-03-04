@@ -3,6 +3,7 @@ package com.xcesys.template.admin.controller;
 import com.xcesys.template.admin.common.Result;
 import com.xcesys.template.admin.dto.RoleDto;
 import com.xcesys.template.admin.entity.Role;
+import com.xcesys.template.admin.mapper.RoleMapper;
 import com.xcesys.template.admin.service.RoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 角色管理控制器
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class RoleController {
 
     private final RoleService roleService;
+    private final RoleMapper roleMapper;
 
     /**
      * 获取角色列表（分页）
@@ -47,7 +48,7 @@ public class RoleController {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("sort").ascending());
         Page<Role> roles = roleService.findRoles(name, enabled, pageable);
 
-        return Result.success(roles.map(this::convertToDto));
+        return Result.success(roles.map(roleMapper::toDto));
     }
 
     /**
@@ -96,12 +97,7 @@ public class RoleController {
 
         // 创建角色
         Role role = new Role();
-        role.setName(roleDto.getName());
-        role.setCode(roleDto.getCode());
-        role.setSort(roleDto.getSort());
-        role.setEnabled(roleDto.getEnabled());
-        role.setDataScope(roleDto.getDataScope());
-        role.setRemark(roleDto.getRemark());
+        roleMapper.toEntity(role, roleDto);
 
         Role createdRole = roleService.createRole(role);
 
@@ -116,7 +112,7 @@ public class RoleController {
         }
 
         // 转换为DTO
-        RoleDto createdRoleDto = convertToDto(createdRole);
+        RoleDto createdRoleDto = roleMapper.toDto(createdRole);
 
         return Result.success("创建成功", createdRoleDto);
     }
@@ -145,13 +141,7 @@ public class RoleController {
         }
 
         // 更新角色
-        existingRole.setName(roleDto.getName());
-        existingRole.setCode(roleDto.getCode());
-        existingRole.setSort(roleDto.getSort());
-        existingRole.setEnabled(roleDto.getEnabled());
-        existingRole.setDataScope(roleDto.getDataScope());
-        existingRole.setRemark(roleDto.getRemark());
-
+        roleMapper.toEntity(existingRole, roleDto);
         Role updatedRole = roleService.updateRole(existingRole);
 
         // 如果指定了权限，更新权限
@@ -165,7 +155,7 @@ public class RoleController {
         }
 
         // 转换为DTO
-        RoleDto updatedRoleDto = convertToDto(updatedRole);
+        RoleDto updatedRoleDto = roleMapper.toDto(updatedRole);
 
         return Result.success("更新成功", updatedRoleDto);
     }
@@ -250,7 +240,7 @@ public class RoleController {
         Role role = roleService.findById(id);
         Set<Long> permissionIds = role.getPermissions().stream()
                 .map(permission -> permission.getId())
-                .collect(Collectors.toSet());
+                .collect(java.util.stream.Collectors.toSet());
         return Result.success(permissionIds);
     }
 
@@ -266,31 +256,7 @@ public class RoleController {
         Role role = roleService.findById(id);
         Set<Long> menuIds = role.getMenus().stream()
                 .map(menu -> menu.getId())
-                .collect(Collectors.toSet());
+                .collect(java.util.stream.Collectors.toSet());
         return Result.success(menuIds);
-    }
-
-    /**
-     * 将角色实体转换为DTO
-     *
-     * @param role 角色实体
-     * @return 角色DTO
-     */
-    private RoleDto convertToDto(Role role) {
-        RoleDto dto = new RoleDto();
-        dto.setId(role.getId());
-        dto.setName(role.getName());
-        dto.setCode(role.getCode());
-        dto.setSort(role.getSort());
-        dto.setEnabled(role.getEnabled());
-        dto.setDataScope(role.getDataScope());
-        dto.setRemark(role.getRemark());
-        dto.setPermissionIds(role.getPermissions().stream()
-                .map(permission -> permission.getId())
-                .collect(Collectors.toSet()));
-        dto.setMenuIds(role.getMenus().stream()
-                .map(menu -> menu.getId())
-                .collect(Collectors.toSet()));
-        return dto;
     }
 }

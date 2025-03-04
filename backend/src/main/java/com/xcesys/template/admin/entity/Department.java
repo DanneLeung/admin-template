@@ -96,5 +96,3 @@ public class Department extends TenantBaseEntity {
   private List<User> users = new ArrayList<>();
 
 }
-// 移除基类中的deleted字段引用
-// private Boolean deleted = false; 该字段存在于基类中需要后续处理

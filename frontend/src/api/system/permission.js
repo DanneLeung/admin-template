@@ -5,7 +5,7 @@ const permissionApi = {
   list: '/permission',
   detail: '/permission/',
   create: '/permission',
-  update: '/permission',
+  update: '/permission/',
   delete: '/permission/',
   batchDelete: '/permission/batch',
   updateStatus: '/permission/status'
@@ -40,7 +40,7 @@ export function createPermission(data) {
 // Update permission
 export function updatePermission(data) {
   return request({
-    url: permissionApi.update,
+    url: permissionApi.update + id,
     method: 'put',
     data
   })

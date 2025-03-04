@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 // 移除以下两行
 // @SQLDelete(sql = "UPDATE sys_company SET deleted = true WHERE id = ? and version = ?")
 // @Where(clause = "deleted = false")
-@Table(name = "sys_company", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"}), @UniqueConstraint(columnNames = {"domain"})})
+@Table(name = "sys_company", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"})})
 public class Company extends BaseEntity {
 
   /**

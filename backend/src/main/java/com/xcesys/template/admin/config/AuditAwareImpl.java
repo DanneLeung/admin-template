@@ -14,12 +14,13 @@ import java.util.Optional;
 @Component
 public class AuditAwareImpl implements AuditorAware<String> {
 
-    @Override
-    public Optional<String> getCurrentAuditor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return Optional.of("SYSTEM");
-        }
-        return Optional.of(authentication.getName());
+  @Override
+  @SuppressWarnings("NullableProblems")
+  public Optional<String> getCurrentAuditor() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return Optional.of("SYSTEM");
     }
+    return Optional.of(authentication.getName());
+  }
 }

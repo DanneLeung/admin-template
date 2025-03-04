@@ -1,8 +1,11 @@
 package com.xcesys.template.admin.controller;
 
 import com.xcesys.template.admin.common.Result;
+import com.xcesys.template.admin.dto.CompanyDto;
 import com.xcesys.template.admin.entity.Company;
+import com.xcesys.template.admin.mapper.CompanyMapper;
 import com.xcesys.template.admin.service.CompanyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,14 +21,16 @@ import org.springframework.web.bind.annotation.*;
 public class CompanyController {
 
   private final CompanyService companyService;
+  private final CompanyMapper companyMapper;
 
   /**
    * 获取公司详情
    */
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('system:company:list')")
-  public Result<Company> getCompany(@PathVariable Long id) {
-    return Result.success(companyService.findById(id));
+  public Result<CompanyDto> getCompany(@PathVariable Long id) {
+    Company company = companyService.findById(id);
+    return Result.success(companyMapper.toDto(company));
   }
 
   /**
@@ -33,12 +38,12 @@ public class CompanyController {
    */
   @GetMapping
   @PreAuthorize("hasAuthority('system:company:list')")
-  public Result<Page<Company>> listCompanies(
+  public Result<Page<CompanyDto>> listCompanies(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Boolean enabled,
       Pageable pageable) {
     Page<Company> page = companyService.findCompanies(name, enabled, pageable);
-    return Result.success(page);
+    return Result.success(page.map(companyMapper::toDto));
   }
 
   /**
@@ -46,8 +51,23 @@ public class CompanyController {
    */
   @PostMapping
   @PreAuthorize("hasAuthority('system:company:add')")
-  public Result<Company> createCompany(@RequestBody Company company) {
-    return Result.success(companyService.createCompany(company));
+  public Result<CompanyDto> createCompany(@Valid @RequestBody CompanyDto companyDto) {
+    // 检查公司编码是否已存在
+    if (companyService.isCodeExists(companyDto.getCode())) {
+      return Result.error(400, "公司编码已存在");
+    }
+
+    // 检查域名是否已存在
+    if (companyDto.getDomain() != null && companyService.isDomainExists(companyDto.getDomain())) {
+      return Result.error(400, "域名已存在");
+    }
+
+    // 创建公司
+    Company company = new Company();
+    companyMapper.toEntity(company, companyDto);
+    Company createdCompany = companyService.createCompany(company);
+
+    return Result.success("创建成功", companyMapper.toDto(createdCompany));
   }
 
   /**
@@ -55,9 +75,27 @@ public class CompanyController {
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('system:company:edit')")
-  public Result<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
-    company.setId(id);
-    return Result.success(companyService.updateCompany(company));
+  public Result<CompanyDto> updateCompany(@PathVariable Long id, @Valid @RequestBody CompanyDto companyDto) {
+    // 检查公司是否存在
+    Company existingCompany = companyService.findById(id);
+
+    // 检查公司编码是否已存在
+    if (!existingCompany.getCode().equals(companyDto.getCode()) && companyService.isCodeExists(companyDto.getCode())) {
+      return Result.error(400, "公司编码已存在");
+    }
+
+    // 检查域名是否已存在
+    if (companyDto.getDomain() != null && 
+        !companyDto.getDomain().equals(existingCompany.getDomain()) && 
+        companyService.isDomainExists(companyDto.getDomain())) {
+      return Result.error(400, "域名已存在");
+    }
+
+    // 更新公司
+    companyMapper.toEntity(existingCompany, companyDto);
+    Company updatedCompany = companyService.updateCompany(existingCompany);
+
+    return Result.success("更新成功", companyMapper.toDto(updatedCompany));
   }
 
   /**

@@ -1,8 +1,11 @@
 package com.xcesys.template.admin.controller;
 
 import com.xcesys.template.admin.common.Result;
+import com.xcesys.template.admin.dto.DepartmentDto;
 import com.xcesys.template.admin.entity.Department;
+import com.xcesys.template.admin.mapper.DepartmentMapper;
 import com.xcesys.template.admin.service.DepartmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +23,16 @@ import java.util.List;
 public class DepartmentController {
 
   private final DepartmentService departmentService;
+  private final DepartmentMapper departmentMapper;
 
   /**
    * 获取部门详情
    */
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('system:department:list')")
-  public Result<Department> getDepartment(@PathVariable Long id) {
-    return Result.success(departmentService.findById(id));
+  public Result<DepartmentDto> getDepartment(@PathVariable Long id) {
+    Department department = departmentService.findById(id);
+    return Result.success(departmentMapper.toDto(department));
   }
 
   /**
@@ -35,11 +40,11 @@ public class DepartmentController {
    */
   @GetMapping({"/tree"})
   @PreAuthorize("hasAuthority('system:department:list')")
-  public Result<List<Department>> getDepartmentTree(
+  public Result<List<DepartmentDto>> getDepartmentTree(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Boolean enabled) {
     List<Department> tree = departmentService.getDepartmentTree(name, enabled);
-    return Result.success(tree);
+    return Result.success(tree.stream().map(departmentMapper::toDto).toList());
   }
 
   /**
@@ -47,12 +52,12 @@ public class DepartmentController {
    */
   @GetMapping
   @PreAuthorize("hasAuthority('system:department:list')")
-  public Result<Page<Department>> listDepartments(
+  public Result<Page<DepartmentDto>> listDepartments(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Boolean enabled,
       Pageable pageable) {
     Page<Department> page = departmentService.findDepartments(name, enabled, pageable);
-    return Result.success(page);
+    return Result.success(page.map(departmentMapper::toDto));
   }
 
   /**
@@ -60,8 +65,11 @@ public class DepartmentController {
    */
   @PostMapping
   @PreAuthorize("hasAuthority('system:department:add')")
-  public Result<Department> createDepartment(@RequestBody Department department) {
-    return Result.success(departmentService.createDepartment(department));
+  public Result<DepartmentDto> createDepartment(@Valid @RequestBody DepartmentDto departmentDto) {
+    Department department = new Department();
+    departmentMapper.toEntity(department, departmentDto);
+    Department createdDepartment = departmentService.createDepartment(department);
+    return Result.success("创建成功", departmentMapper.toDto(createdDepartment));
   }
 
   /**
@@ -69,9 +77,11 @@ public class DepartmentController {
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('system:department:edit')")
-  public Result<Department> updateDepartment(@PathVariable Long id, @RequestBody Department department) {
-    department.setId(id);
-    return Result.success(departmentService.updateDepartment(department));
+  public Result<DepartmentDto> updateDepartment(@PathVariable Long id, @Valid @RequestBody DepartmentDto departmentDto) {
+    Department existingDepartment = departmentService.findById(id);
+    departmentMapper.toEntity(existingDepartment, departmentDto);
+    Department updatedDepartment = departmentService.updateDepartment(existingDepartment);
+    return Result.success("更新成功", departmentMapper.toDto(updatedDepartment));
   }
 
   /**

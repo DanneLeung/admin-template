@@ -3,6 +3,7 @@ package com.xcesys.template.admin.controller;
 import com.xcesys.template.admin.common.Result;
 import com.xcesys.template.admin.dto.UserDto;
 import com.xcesys.template.admin.entity.User;
+import com.xcesys.template.admin.mapper.UserMapper;
 import com.xcesys.template.admin.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 用户管理控制器
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
   private final UserService userService;
+  private final UserMapper userMapper;
 
   /**
    * 获取当前登录用户信息
@@ -82,7 +83,7 @@ public class UserController {
     Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("createTime").descending());
     Page<User> users = userService.findUsers(keyword, deptId, enabled, pageable);
 
-    return Result.success(users.map(this::convertToDto));
+    return Result.success(users.map(this.userMapper::toDto));
   }
 
   /**
@@ -140,7 +141,7 @@ public class UserController {
     }
 
     // 转换为DTO
-    UserDto createdUserDto = convertToDto(createdUser);
+    UserDto createdUserDto = this.userMapper.toDto(createdUser);
 
     return Result.success("创建成功", createdUserDto);
   }
@@ -179,15 +180,7 @@ public class UserController {
     }
 
     // 更新用户
-    existingUser.setCompanyId(userDto.getCompanyId());
-    existingUser.setDepartmentId(userDto.getDepartmentId());
-    existingUser.setUsername(userDto.getUsername());
-    existingUser.setNickname(userDto.getNickname());
-    existingUser.setEmail(userDto.getEmail());
-    existingUser.setPhone(userDto.getPhone());
-    existingUser.setGender(userDto.getGender());
-    existingUser.setEnabled(userDto.getEnabled());
-
+    this.userMapper.toEntity(existingUser, userDto);
     User updatedUser = userService.updateUser(existingUser);
 
     // 如果指定了角色，更新角色
@@ -196,7 +189,7 @@ public class UserController {
     }
 
     // 转换为DTO
-    UserDto updatedUserDto = convertToDto(updatedUser);
+    UserDto updatedUserDto = this.userMapper.toDto(updatedUser);
 
     return Result.success("更新成功", updatedUserDto);
   }
@@ -287,27 +280,5 @@ public class UserController {
     return Result.success("分配角色成功");
   }
 
-  /**
-   * 将用户实体转换为DTO
-   *
-   * @param user 用户实体
-   * @return 用户DTO
-   */
-  private UserDto convertToDto(User user) {
-    UserDto dto = new UserDto();
-    dto.setId(user.getId());
-    dto.setCompanyId(user.getCompanyId());
-    dto.setCompanyName(user.getCompany() != null ? user.getCompany().getName() : null);
-    dto.setDepartmentId(user.getDepartmentId());
-    dto.setDepartmentName(user.getDepartment() != null ? user.getDepartment().getName() : null);
-    dto.setUsername(user.getUsername());
-    dto.setNickname(user.getNickname());
-    dto.setEmail(user.getEmail());
-    dto.setPhone(user.getPhone());
-    dto.setGender(user.getGender());
-    dto.setEnabled(user.getEnabled());
-    dto.setDepartmentId(user.getDepartment() != null ? user.getDepartment().getId() : null);
-    dto.setRoleIds(user.getRoles().stream().map(role -> role.getId()).collect(Collectors.toSet()));
-    return dto;
-  }
+
 }

@@ -24,8 +24,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE sys_permission SET deleted = true WHERE id = ? and version = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE sys_permission SET deleted = true WHERE id = ? and version = ?")
+//@Where(clause = "deleted = false")
 public class Permission extends BaseEntity {
 
   /**
