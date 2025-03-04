@@ -39,11 +39,11 @@ public interface CompanyService {
      * 分页查询公司列表
      *
      * @param name     公司名称（模糊查询）
-     * @param status   状态
+     * @param enabled   状态
      * @param pageable 分页参数
      * @return 公司分页列表
      */
-    Page<Company> findCompanies(String name, Integer status, Pageable pageable);
+    Page<Company> findCompanies(String name, Boolean enabled, Pageable pageable);
 
     /**
      * 创建公司
@@ -72,9 +72,9 @@ public interface CompanyService {
      * 更新公司状态
      *
      * @param id     公司ID
-     * @param status 状态
+     * @param enabled 状态
      */
-    void updateStatus(Long id, Integer status);
+    void updateEnabled(Long id, Boolean enabled);
 
     /**
      * 判断公司编码是否存在

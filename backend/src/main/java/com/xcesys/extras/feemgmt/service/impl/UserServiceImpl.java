@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
         }
 
         // 设置默认状态为启用
-        if (user.getStatus() == null) {
-            user.setStatus(0);
+        if (user.getEnabled() == null) {
+            user.setEnabled(true);
         }
 
         return userRepository.save(user);
@@ -119,11 +119,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findUsers(String keyword, Long deptId, Integer status, Pageable pageable) {
+    public Page<User> findUsers(String keyword, Long deptId, Boolean enabled, Pageable pageable) {
         if (StringUtils.hasText(keyword)) {
             return userRepository.findByKeyword(keyword, pageable);
-        } else if (deptId != null && status != null) {
-            return userRepository.findByDepartmentIdAndStatus(deptId, status, pageable);
+        } else if (deptId != null && enabled != null) {
+            return userRepository.findByDepartmentIdAndEnabled(deptId, enabled, pageable);
         } else {
             return userRepository.findAll(pageable);
         }
@@ -166,9 +166,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateStatus(Long userId, Integer status) {
+    public void updateEnabled(Long userId, Boolean enabled) {
         User user = findById(userId);
-        user.setStatus(status);
+        user.setEnabled(enabled);
         userRepository.save(user);
     }
 

@@ -32,7 +32,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
    */
   Optional<Company> findByDomain(String domain);
 
-  Page<Company> findByNameContainingAndStatus(String name, Integer status, Pageable pageable);
+  Page<Company> findByNameContainingAndEnabled(String name, Boolean enabled, Pageable pageable);
 
-  Page<Company> findByStatus(Integer status, Pageable pageable);
+  Page<Company> findByEnabled(Boolean enabled, Pageable pageable);
 }

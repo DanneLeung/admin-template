@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
   private String username;
   @JsonIgnore
   private String password;
-  private Integer status;
+  private Boolean enabled;
   private Long companyId;
   private Collection<? extends GrantedAuthority> authorities;
 
@@ -48,7 +48,7 @@ public class UserDetailsImpl implements UserDetails {
         user.getId(),
         user.getUsername(),
         user.getPassword(),
-        user.getStatus(),
+        user.getEnabled(),
         user.getCompanyId(),
         authorities);
   }
@@ -77,7 +77,7 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public boolean isAccountNonLocked() {
     // 0: 正常, 1: 停用
-    return !Objects.equals(status, 1);
+    return enabled;
   }
 
   @Override
@@ -88,7 +88,7 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public boolean isEnabled() {
     // 0: 正常, 1: 停用
-    return Objects.equals(status, 0);
+    return enabled;
   }
 
   @Override

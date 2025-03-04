@@ -12,7 +12,7 @@
           />
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="菜单状态" clearable>
+          <el-select v-model="queryParams.enabled" placeholder="菜单状态" clearable>
             <el-option label="显示" :value="0" />
             <el-option label="隐藏" :value="1" />
           </el-select>
@@ -62,9 +62,7 @@
       <el-table-column label="状态" align="center" width="100">
         <template #default="{ row }">
           <el-switch
-            v-model="row.status"
-            :active-value="0"
-            :inactive-value="1"
+            v-model="row.enabled"
             @change="handleStatusChange(row)"
           />
         </template>
@@ -135,7 +133,7 @@
           <el-input v-model="menuForm.permission" placeholder="请输入权限标识" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="menuForm.status">
+          <el-radio-group v-model="menuForm.enabled">
             <el-radio :value="0">显示</el-radio>
             <el-radio :value="1">隐藏</el-radio>
           </el-radio-group>
@@ -170,7 +168,7 @@ const menuOptions = ref([])
 // Query params
 const queryParams = reactive({
   name: '',
-  status: null
+  enabled: null
 })
 
 // Dialog control
@@ -192,7 +190,7 @@ const menuForm = reactive({
   path: '',
   component: '',
   permission: '',
-  status: 0
+  enabled: true
 })
 
 // Form rules
@@ -232,7 +230,7 @@ const handleQuery = () => {
 
 const resetQuery = () => {
   queryParams.name = ''
-  queryParams.status = null
+  queryParams.enabled = null
   handleQuery()
 }
 
@@ -268,11 +266,11 @@ const handleDelete = (row) => {
 
 const handleStatusChange = async (row) => {
   try {
-    await updateMenuStatus(row.id, row.status)
+    await updateMenuStatus(row.id, row.enabled)
     ElMessage.success('状态修改成功')
   } catch (error) {
     ElMessage.error('状态修改失败')
-    row.status = row.status === 0 ? 1 : 0
+    row.enabled = !row.enabled
   }
 }
 
@@ -306,7 +304,7 @@ const resetForm = () => {
     path: '',
     component: '',
     permission: '',
-    status: 0
+    enabled: true
   })
 }
 

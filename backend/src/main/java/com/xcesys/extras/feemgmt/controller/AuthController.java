@@ -111,7 +111,7 @@ public class AuthController {
     user.setEmail(userDto.getEmail());
     user.setPhone(userDto.getPhone());
     user.setGender(userDto.getGender());
-    user.setStatus(0); // 默认启用
+    user.setEnabled(true); // 默认启用
 
     User createdUser = userService.createUser(user);
 
@@ -123,7 +123,7 @@ public class AuthController {
     createdUserDto.setEmail(createdUser.getEmail());
     createdUserDto.setPhone(createdUser.getPhone());
     createdUserDto.setGender(createdUser.getGender());
-    createdUserDto.setStatus(createdUser.getStatus());
+    createdUserDto.setEnabled(createdUser.getEnabled());
 
     return Result.success("注册成功", createdUserDto);
   }

@@ -80,9 +80,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * 根据部门ID和用户状态查询用户列表
      *
      * @param deptId 部门ID
-     * @param status 用户状态
+     * @param enabled 用户状态
      * @param pageable 分页参数
      * @return 用户分页列表
      */
-    Page<User> findByDepartmentIdAndStatus(Long deptId, Integer status, Pageable pageable);
+    Page<User> findByDepartmentIdAndEnabled(Long deptId, Boolean enabled, Pageable pageable);
 }

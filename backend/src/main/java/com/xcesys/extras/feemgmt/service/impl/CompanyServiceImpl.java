@@ -39,11 +39,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Page<Company> findCompanies(String name, Integer status, Pageable pageable) {
+    public Page<Company> findCompanies(String name, Boolean enabled, Pageable pageable) {
         if (StringUtils.hasText(name)) {
-            return companyRepository.findByNameContainingAndStatus(name, status, pageable);
-        } else if (status != null) {
-            return companyRepository.findByStatus(status, pageable);
+            return companyRepository.findByNameContainingAndEnabled(name, enabled, pageable);
+        } else if (enabled != null) {
+            return companyRepository.findByEnabled(enabled, pageable);
         } else {
             return companyRepository.findAll(pageable);
         }
@@ -63,8 +63,8 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         // 设置默认状态为启用
-        if (company.getStatus() == null) {
-            company.setStatus(0);
+        if (company.getEnabled() == null) {
+            company.setEnabled(true);
         }
 
         return companyRepository.save(company);
@@ -99,9 +99,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public void updateStatus(Long id, Integer status) {
+    public void updateEnabled(Long id, Boolean enabled) {
         Company company = findById(id);
-        company.setStatus(status);
+        company.setEnabled(enabled);
         companyRepository.save(company);
     }
 

@@ -33,7 +33,7 @@ public class RoleController {
      * @param pageNum  页码
      * @param pageSize 每页大小
      * @param name     角色名称（模糊查询）
-     * @param status   角色状态
+     * @param enabled   角色状态
      * @return 角色分页列表
      */
     @GetMapping
@@ -42,10 +42,10 @@ public class RoleController {
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) Integer status) {
+            @RequestParam(required = false) Boolean enabled) {
 
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("sort").ascending());
-        Page<Role> roles = roleService.findRoles(name, status, pageable);
+        Page<Role> roles = roleService.findRoles(name, enabled, pageable);
 
         return Result.success(roles.map(this::convertToDto));
     }
@@ -99,7 +99,7 @@ public class RoleController {
         role.setName(roleDto.getName());
         role.setCode(roleDto.getCode());
         role.setSort(roleDto.getSort());
-        role.setStatus(roleDto.getStatus());
+        role.setEnabled(roleDto.getEnabled());
         role.setDataScope(roleDto.getDataScope());
         role.setRemark(roleDto.getRemark());
 
@@ -148,7 +148,7 @@ public class RoleController {
         existingRole.setName(roleDto.getName());
         existingRole.setCode(roleDto.getCode());
         existingRole.setSort(roleDto.getSort());
-        existingRole.setStatus(roleDto.getStatus());
+        existingRole.setEnabled(roleDto.getEnabled());
         existingRole.setDataScope(roleDto.getDataScope());
         existingRole.setRemark(roleDto.getRemark());
 
@@ -200,13 +200,13 @@ public class RoleController {
      * 更新角色状态
      *
      * @param id     角色ID
-     * @param status 状态
+     * @param enabled 状态
      * @return 更新结果
      */
-    @PutMapping("/{id}/status")
+    @PutMapping("/status")
     @PreAuthorize("hasAuthority('system:role:edit')")
-    public Result<String> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
-        roleService.updateStatus(id, status);
+    public Result<String> updateStatus(@RequestParam("id") Long id, @RequestParam("enabled") Boolean enabled) {
+        roleService.updateEnabled(id, enabled);
         return Result.success("更新状态成功");
     }
 
@@ -282,7 +282,7 @@ public class RoleController {
         dto.setName(role.getName());
         dto.setCode(role.getCode());
         dto.setSort(role.getSort());
-        dto.setStatus(role.getStatus());
+        dto.setEnabled(role.getEnabled());
         dto.setDataScope(role.getDataScope());
         dto.setRemark(role.getRemark());
         dto.setPermissionIds(role.getPermissions().stream()

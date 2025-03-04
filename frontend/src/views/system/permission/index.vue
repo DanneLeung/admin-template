@@ -20,9 +20,9 @@
           />
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="权限状态" clearable>
-            <el-option label="启用" :value="0" />
-            <el-option label="禁用" :value="1" />
+          <el-select v-model="queryParams.enabled" placeholder="权限状态" clearable>
+            <el-option label="启用" :value="true" />
+            <el-option label="禁用" :value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -75,10 +75,10 @@
         <el-table-column prop="name" label="权限名称" />
         <el-table-column prop="code" label="权限标识" />
         <el-table-column prop="description" label="权限描述" />
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="enabled" label="状态" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.status === 0 ? 'success' : 'danger'">
-              {{ row.status === 0 ? '启用' : '禁用' }}
+            <el-tag :type="row.enabled ? 'success' : 'danger'">
+              {{ row.enabled ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -143,10 +143,10 @@
             placeholder="请输入权限描述"
           />
         </el-form-item>
-        <el-form-item label="权限状态" prop="status">
-          <el-radio-group v-model="permissionForm.status">
-            <el-radio :value="0">启用</el-radio>
-            <el-radio :value="1">禁用</el-radio>
+        <el-form-item label="权限状态" prop="enabled">
+          <el-radio-group v-model="permissionForm.enabled">
+            <el-radio :value="true">启用</el-radio>
+            <el-radio :value="false">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -170,7 +170,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/store/user'
-import { getPermissionList, createPermission, updatePermission, deletePermission, batchDeletePermissions, updatePermissionStatus } from '@/api/system/permission'
+import { getPermissionList, createPermission, updatePermission, deletePermission, batchDeletePermissions } from '@/api/system/permission'
 
 // Store
 const userStore = useUserStore()
@@ -188,7 +188,7 @@ const queryParams = reactive({
   pageSize: 10,
   name: '',
   code: '',
-  status: null
+  enabled: null
 })
 
 // Dialog control
@@ -205,7 +205,7 @@ const permissionForm = reactive({
   name: '',
   code: '',
   description: '',
-  status: 0
+  enabled: false
 })
 
 // Form rules
@@ -241,26 +241,8 @@ const handleQuery = () => {
 const resetQuery = () => {
   queryParams.name = ''
   queryParams.code = ''
-  queryParams.status = null
+  queryParams.enabled = null
   handleQuery()
-}
-
-const handleSubmit = async () => {
-  if (!permissionFormRef.value) return
-
-  try {
-    await permissionFormRef.value.validate()
-    if (dialog.type === 'add') {
-      await createPermission(permissionForm)
-    } else {
-      await updatePermission(permissionForm)
-    }
-    ElMessage.success(dialog.type === 'add' ? '添加成功' : '修改成功')
-    dialog.visible = false
-    getList()
-  } catch (error) {
-    ElMessage.error(dialog.type === 'add' ? '添加失败' : '修改失败')
-  }
 }
 
 const handleSizeChange = (val) => {
@@ -278,7 +260,7 @@ const resetForm = () => {
   permissionForm.name = ''
   permissionForm.code = ''
   permissionForm.description = ''
-  permissionForm.status = 0
+  permissionForm.enabled = false
 }
 
 const handleAdd = () => {
@@ -302,8 +284,11 @@ const submitForm = async () => {
     if (valid) {
       try {
         // TODO: Implement API call
-        // const api = dialog.type === 'add' ? addPermission : updatePermission
-        // await api(permissionForm)
+        if (dialog.type === 'add') {
+          await createPermission(permissionForm)
+        } else {
+          await updatePermission(permissionForm)
+        }
         ElMessage.success(`${dialog.type === 'add' ? '添加' : '修改'}成功`)
         dialog.visible = false
         getList()
@@ -320,7 +305,7 @@ const handleDelete = (row) => {
   }).then(async () => {
     try {
       // TODO: Implement API call
-      // await deletePermission(row.id)
+      await deletePermission(row.id)
       ElMessage.success('删除成功')
       getList()
     } catch (error) {
@@ -335,7 +320,7 @@ const handleBatchDelete = () => {
   }).then(async () => {
     try {
       // TODO: Implement API call
-      // await batchDeletePermissions(selectedPermissions.value.map(item => item.id))
+      await batchDeletePermissions(selectedPermissions.value.map(item => item.id))
       ElMessage.success('批量删除成功')
       getList()
     } catch (error) {

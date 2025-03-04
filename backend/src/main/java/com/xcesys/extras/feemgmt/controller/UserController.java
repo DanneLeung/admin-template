@@ -46,6 +46,8 @@ public class UserController {
 
     Map<String, Object> userInfo = new HashMap<>();
     userInfo.put("id", user.getId());
+    userInfo.put("companyId", user.getCompanyId());
+    userInfo.put("departmentId", user.getDepartmentId());
     userInfo.put("username", user.getUsername());
     userInfo.put("nickname", user.getNickname());
     userInfo.put("avatar", user.getAvatar());
@@ -65,7 +67,7 @@ public class UserController {
    * @param pageSize 每页大小
    * @param keyword  关键字
    * @param deptId   部门ID
-   * @param status   状态
+   * @param enabled  状态
    * @return 用户分页列表
    */
   @GetMapping
@@ -75,10 +77,10 @@ public class UserController {
       @RequestParam(defaultValue = "10") int pageSize,
       @RequestParam(required = false) String keyword,
       @RequestParam(required = false) Long deptId,
-      @RequestParam(required = false) Integer status) {
+      @RequestParam(required = false) Boolean enabled) {
 
     Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("createTime").descending());
-    Page<User> users = userService.findUsers(keyword, deptId, status, pageable);
+    Page<User> users = userService.findUsers(keyword, deptId, enabled, pageable);
 
     return Result.success(users.map(this::convertToDto));
   }
@@ -128,7 +130,7 @@ public class UserController {
     user.setEmail(userDto.getEmail());
     user.setPhone(userDto.getPhone());
     user.setGender(userDto.getGender());
-    user.setStatus(userDto.getStatus() != null ? userDto.getStatus() : 0);
+    user.setEnabled(userDto.getEnabled());
 
     User createdUser = userService.createUser(user);
 
@@ -177,12 +179,14 @@ public class UserController {
     }
 
     // 更新用户
+    existingUser.setCompanyId(userDto.getCompanyId());
+    existingUser.setDepartmentId(userDto.getDepartmentId());
     existingUser.setUsername(userDto.getUsername());
     existingUser.setNickname(userDto.getNickname());
     existingUser.setEmail(userDto.getEmail());
     existingUser.setPhone(userDto.getPhone());
     existingUser.setGender(userDto.getGender());
-    existingUser.setStatus(userDto.getStatus());
+    existingUser.setEnabled(userDto.getEnabled());
 
     User updatedUser = userService.updateUser(existingUser);
 
@@ -258,14 +262,14 @@ public class UserController {
   /**
    * 更新用户状态
    *
-   * @param id     用户ID
-   * @param status 状态
+   * @param id      用户ID
+   * @param enabled 状态
    * @return 更新结果
    */
-  @PutMapping("/{id}/status")
+  @PutMapping("/status")
   @PreAuthorize("hasAuthority('system:user:edit')")
-  public Result<String> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
-    userService.updateStatus(id, status);
+  public Result<String> updateStatus(@RequestParam Long id, @RequestParam Boolean enabled) {
+    userService.updateEnabled(id, enabled);
     return Result.success("更新状态成功");
   }
 
@@ -292,13 +296,17 @@ public class UserController {
   private UserDto convertToDto(User user) {
     UserDto dto = new UserDto();
     dto.setId(user.getId());
+    dto.setCompanyId(user.getCompanyId());
+    dto.setCompanyName(user.getCompany() != null ? user.getCompany().getName() : null);
+    dto.setDepartmentId(user.getDepartmentId());
+    dto.setDepartmentName(user.getDepartment() != null ? user.getDepartment().getName() : null);
     dto.setUsername(user.getUsername());
     dto.setNickname(user.getNickname());
     dto.setEmail(user.getEmail());
     dto.setPhone(user.getPhone());
     dto.setGender(user.getGender());
-    dto.setStatus(user.getStatus());
-    dto.setDeptId(user.getDepartment() != null ? user.getDepartment().getId() : null);
+    dto.setEnabled(user.getEnabled());
+    dto.setDepartmentId(user.getDepartment() != null ? user.getDepartment().getId() : null);
     dto.setRoleIds(user.getRoles().stream().map(role -> role.getId()).collect(Collectors.toSet()));
     return dto;
   }

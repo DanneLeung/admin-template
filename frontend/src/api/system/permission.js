@@ -64,10 +64,10 @@ export function batchDeletePermissions(ids) {
 }
 
 // Update permission status
-export function updatePermissionStatus(id, status) {
+export function updatePermissionStatus(id, enabled) {
   return request({
     url: permissionApi.updateStatus,
-    method: 'patch',
-    data: { id, status }
+    method: 'put',
+    params: { id, enabled}
   })
 }

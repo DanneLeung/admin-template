@@ -65,11 +65,11 @@ export function batchDeleteRoles(ids) {
 }
 
 // Update role status
-export function updateRoleStatus(id, status) {
+export function updateRoleStatus(id, enabled) {
   return request({
     url: roleApi.updateStatus,
-    method: 'patch',
-    data: { id, status }
+    method: 'put',
+    params: { id, enabled}
   })
 }
 

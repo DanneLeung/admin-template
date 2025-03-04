@@ -54,10 +54,10 @@ export function deleteMenu(id) {
 }
 
 // Update menu status
-export function updateMenuStatus(id, status) {
+export function updateMenuStatus(id, enabled) {
   return request({
     url: menuApi.updateStatus,
-    method: 'patch',
-    data: { id, status }
+    method: 'put',
+    params: { id, enabled}
   })
 }

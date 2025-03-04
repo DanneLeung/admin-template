@@ -71,9 +71,10 @@ public class MenuDto {
     private Boolean visible = true;
 
     /**
-     * 菜单状态（0正常 1停用）
+     * 启用状态
      */
-    private Integer status = 0;
+    @NotNull(message = "启用状态不能为空")
+    private Boolean enabled = true;
 
     /**
      * 权限标识

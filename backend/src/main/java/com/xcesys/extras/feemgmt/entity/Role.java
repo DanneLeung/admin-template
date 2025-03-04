@@ -1,19 +1,11 @@
 package com.xcesys.extras.feemgmt.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,8 +18,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE sys_role SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+// 移除以下软删除注解
+// @SQLDelete(sql = "UPDATE sys_role SET deleted = true WHERE id = ? and version = ?")
+// @Where(clause = "deleted = false")
 public class Role extends BaseEntity {
 
     /**
@@ -53,10 +46,10 @@ public class Role extends BaseEntity {
     private Integer sort;
     
     /**
-     * 角色状态（0正常 1停用）
+     * 角色状态（true 启用 false 禁用）
      */
-    @Column(name = "status", nullable = false)
-    private Integer status = 0;
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = true;
 
     /**
      * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）

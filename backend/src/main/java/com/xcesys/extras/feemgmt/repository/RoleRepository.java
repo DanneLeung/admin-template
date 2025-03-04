@@ -63,18 +63,18 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     /**
      * 根据角色状态查询角色列表
      *
-     * @param status 角色状态
+     * @param enabled 角色状态
      * @return 角色列表
      */
-    List<Role> findByStatus(Integer status);
+    List<Role> findByEnabled(Boolean enabled);
     
     /**
      * 根据角色名称和状态查询角色列表
      *
      * @param name 角色名称
-     * @param status 角色状态
+     * @param enabled 角色状态
      * @param pageable 分页参数
      * @return 角色分页列表
      */
-    Page<Role> findByNameContainingAndStatus(String name, Integer status, Pageable pageable);
+    Page<Role> findByNameContainingAndEnabled(String name, Boolean enabled, Pageable pageable);
 }

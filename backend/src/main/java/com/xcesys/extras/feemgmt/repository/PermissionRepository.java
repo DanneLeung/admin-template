@@ -73,8 +73,8 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
      * 根据权限类型和状态查询权限列表
      *
      * @param type 权限类型
-     * @param status 权限状态
+     * @param enabled 权限状态
      * @return 权限列表
      */
-    List<Permission> findByTypeAndStatus(Integer type, Integer status);
+    List<Permission> findByTypeAndEnabled(Integer type, Boolean enabled);
 }

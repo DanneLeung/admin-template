@@ -21,7 +21,7 @@
             <el-table-column prop="sort" label="排序" width="80" />
             <el-table-column label="状态" width="80" align="center">
               <template #default="{ row }">
-                <dict-tag :options="deptStatusOptions" :value="row.status" />
+                <dict-tag :options="deptStatusOptions" :value="row.enabled" />
               </template>
             </el-table-column>
             <el-table-column label="操作" width="180" align="center">
@@ -72,7 +72,7 @@
             <el-descriptions-item label="联系电话">{{ dept.phone }}</el-descriptions-item>
             <el-descriptions-item label="邮箱">{{ dept.email }}</el-descriptions-item>
             <el-descriptions-item label="部门状态">
-              <dict-tag :options="deptStatusOptions" :value="dept.status" />
+              <dict-tag :options="deptStatusOptions" :value="dept.enabled" />
             </el-descriptions-item>
             <el-descriptions-item label="创建时间">{{ dept.createTime }}</el-descriptions-item>
           </el-descriptions>
@@ -101,8 +101,8 @@
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
             </el-form-item>
-            <el-form-item label="部门状态" prop="status">
-              <el-radio-group v-model="form.status">
+            <el-form-item label="部门状态" prop="enabled">
+              <el-radio-group v-model="form.enabled">
                 <el-radio v-for="dict in deptStatusOptions" :key="dict.value" :label="dict.value">
                   {{ dict.label }}
                 </el-radio>
@@ -161,7 +161,7 @@ const form = ref({
   leader: undefined,
   phone: undefined,
   email: undefined,
-  status: 0,
+  enabled: true,
   companyId: undefined
 })
 
@@ -238,7 +238,7 @@ const reset = () => {
     leader: undefined,
     phone: undefined,
     email: undefined,
-    status: 0,
+    enabled: true,
     companyId: undefined
   }
 }

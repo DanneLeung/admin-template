@@ -48,12 +48,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page<Role> findRoles(String name, Integer status, Pageable pageable) {
-        if (StringUtils.hasText(name) && status != null) {
-            return roleRepository.findByNameContainingAndStatus(name, status, pageable);
+    public Page<Role> findRoles(String name, Boolean enabled, Pageable pageable) {
+        if (StringUtils.hasText(name) && enabled != null) {
+            return roleRepository.findByNameContainingAndEnabled(name, enabled, pageable);
         } else if (StringUtils.hasText(name)) {
             return roleRepository.findByNameContaining(name, pageable);
-        } else if (status != null) {
+        } else if (enabled != null) {
             return roleRepository.findAll(pageable);
         } else {
             return roleRepository.findAll(pageable);
@@ -84,8 +84,8 @@ public class RoleServiceImpl implements RoleService {
         }
 
         // 设置默认状态为启用
-        if (role.getStatus() == null) {
-            role.setStatus(0);
+        if (role.getEnabled() == null) {
+            role.setEnabled(true);
         }
 
         // 设置默认数据范围
@@ -129,15 +129,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void updateStatus(Long id, Integer status) {
+    public void updateEnabled(Long id, Boolean enabled) {
         Role role = findById(id);
         
         // 检查角色是否是系统内置角色
-        if ("admin".equalsIgnoreCase(role.getCode()) && status == 1) {
+        if ("admin".equalsIgnoreCase(role.getCode()) && !enabled) {
             throw BusinessException.validationError("不能停用系统内置管理员角色");
         }
         
-        role.setStatus(status);
+        role.setEnabled(enabled);
         roleRepository.save(role);
     }
 

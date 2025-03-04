@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,8 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+  @Serial
+  private static final long serialVersionUID = -158808243487997030L;
 
   /**
    * 主键ID
@@ -80,9 +82,5 @@ public abstract class BaseEntity implements Serializable {
   @Column(name = "remark", length = 500)
   private String remark;
 
-  /**
-   * 删除标志（0代表存在 1代表删除）
-   */
-  @Column(name = "deleted", nullable = false)
-  private Boolean deleted = false;
+
 }

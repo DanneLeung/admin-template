@@ -9,8 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +19,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE sys_company SET deleted = true WHERE id = ?")
+// 移除以下两行
+// @SQLDelete(sql = "UPDATE sys_company SET deleted = true WHERE id = ? and version = ?")
+// @Where(clause = "deleted = false")
 @Table(name = "sys_company", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"}), @UniqueConstraint(columnNames = {"domain"})})
 public class Company extends BaseEntity {
 
@@ -90,10 +89,10 @@ public class Company extends BaseEntity {
   private LocalDateTime expireTime;
 
   /**
-   * 状态（0正常 1停用）
+   * 状态（true 启用 false 禁用）
    */
-  @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  @Column(name = "enabled", nullable = false)
+  private Boolean enabled = true;
 
   /**
    * 备注

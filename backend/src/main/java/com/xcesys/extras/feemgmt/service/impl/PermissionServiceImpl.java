@@ -78,8 +78,8 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     // 设置默认状态为启用
-    if (permission.getStatus() == null) {
-      permission.setStatus(0);
+    if (permission.getEnabled() == null) {
+      permission.setEnabled(true);
     }
 
     return permissionRepository.save(permission);
@@ -113,9 +113,9 @@ public class PermissionServiceImpl implements PermissionService {
 
   @Override
   @Transactional
-  public void updateStatus(Long id, Integer status) {
+  public void updateEnabled(Long id, Boolean enabled) {
     Permission permission = findById(id);
-    permission.setStatus(status);
+    permission.setEnabled(enabled);
     permissionRepository.save(permission);
   }
 

@@ -13,9 +13,9 @@
             />
           </el-form-item>
           <el-form-item label="状态">
-            <el-select v-model="queryParams.status" placeholder="角色状态" clearable>
-              <el-option label="正常" :value="0" />
-              <el-option label="停用" :value="1" />
+            <el-select v-model="queryParams.enabled" placeholder="角色状态" clearable>
+              <el-option label="正常" :value="true" />
+              <el-option label="停用" :value="false" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -43,9 +43,7 @@
         <el-table-column label="状态" align="center" width="100">
           <template #default="{ row }">
             <el-switch
-              v-model="row.status"
-              :active-value="0"
-              :inactive-value="1"
+              v-model="row.enabled"
               @change="handleStatusChange(row)"
             />
           </template>
@@ -96,9 +94,9 @@
           <el-input-number v-model="roleForm.sort" :min="0" :max="999" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="roleForm.status">
-            <el-radio :value="0">正常</el-radio>
-            <el-radio :value="1">停用</el-radio>
+          <el-radio-group v-model="roleForm.enabled">
+            <el-radio :value="true">启用</el-radio>
+            <el-radio :value="false">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -158,7 +156,7 @@ const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
   name: '',
-  status: null
+  enabled: null
 })
 
 // Dialog control
@@ -182,7 +180,7 @@ const roleForm = reactive({
   name: '',
   code: '',
   sort: 0,
-  status: 0,
+  enabled: true,
   remark: ''
 })
 
@@ -251,11 +249,11 @@ const handleBatchDelete = () => {
 
 const handleStatusChange = async (row) => {
   try {
-    await updateRoleStatus(row.id, row.status)
+    await updateRoleStatus(row.id, row.enabled)
     ElMessage.success('状态修改成功')
   } catch (error) {
     ElMessage.error('状态修改失败')
-    row.status = row.status === 0 ? 1 : 0
+    row.enabled = !row.enabled
   }
 }
 
@@ -295,7 +293,7 @@ const resetForm = () => {
     name: '',
     code: '',
     sort: 0,
-    status: 0,
+    enabled: true,
     remark: ''
   })
 }
@@ -326,7 +324,7 @@ const handleQuery = () => {
 const resetQuery = () => {
   queryParams.pageNum = 1
   queryParams.name = ''
-  queryParams.status = null
+  queryParams.enabled = null
   getList()
 }
 

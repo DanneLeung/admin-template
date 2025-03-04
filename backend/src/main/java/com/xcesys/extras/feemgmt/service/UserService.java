@@ -57,11 +57,11 @@ public interface UserService {
      *
      * @param keyword  关键字
      * @param deptId   部门ID
-     * @param status   状态
+     * @param enabled   状态
      * @param pageable 分页参数
      * @return 用户分页列表
      */
-    Page<User> findUsers(String keyword, Long deptId, Integer status, Pageable pageable);
+    Page<User> findUsers(String keyword, Long deptId, Boolean enabled, Pageable pageable);
 
     /**
      * 根据部门ID获取用户列表
@@ -92,9 +92,9 @@ public interface UserService {
      * 更新用户状态
      *
      * @param userId 用户ID
-     * @param status 状态
+     * @param enabled 状态
      */
-    void updateStatus(Long userId, Integer status);
+    void updateEnabled(Long userId, Boolean enabled);
 
     /**
      * 为用户分配角色

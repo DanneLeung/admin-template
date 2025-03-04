@@ -79,7 +79,7 @@ public class MenuController {
         menu.setIsCache(menuDto.getIsCache());
         menu.setType(menuDto.getType());
         menu.setVisible(menuDto.getVisible());
-        menu.setStatus(menuDto.getStatus());
+        menu.setEnabled(menuDto.getEnabled());
         menu.setPermissionCode(menuDto.getPermissionCode());
         menu.setIcon(menuDto.getIcon());
         menu.setSort(menuDto.getSort());
@@ -116,7 +116,7 @@ public class MenuController {
         existingMenu.setIsCache(menuDto.getIsCache());
         existingMenu.setType(menuDto.getType());
         existingMenu.setVisible(menuDto.getVisible());
-        existingMenu.setStatus(menuDto.getStatus());
+        existingMenu.setEnabled(menuDto.getEnabled());
         existingMenu.setPermissionCode(menuDto.getPermissionCode());
         existingMenu.setIcon(menuDto.getIcon());
         existingMenu.setSort(menuDto.getSort());
@@ -147,13 +147,13 @@ public class MenuController {
      * 更新菜单状态
      *
      * @param id     菜单ID
-     * @param status 状态
+     * @param enabled 状态
      * @return 更新结果
      */
-    @PutMapping("/{id}/status")
+    @PutMapping("/status")
     @PreAuthorize("hasAuthority('system:menu:edit')")
-    public Result<String> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
-        menuService.updateStatus(id, status);
+    public Result<String> updateStatus(@RequestParam("id") Long id, @RequestParam("enabled") Boolean enabled) {
+        menuService.updateEnabled(id, enabled);
         return Result.success("更新状态成功");
     }
 
@@ -203,7 +203,7 @@ public class MenuController {
         dto.setIsCache(menu.getIsCache());
         dto.setType(menu.getType());
         dto.setVisible(menu.getVisible());
-        dto.setStatus(menu.getStatus());
+        dto.setEnabled(menu.getEnabled());
         dto.setPermissionCode(menu.getPermissionCode());
         dto.setIcon(menu.getIcon());
         dto.setSort(menu.getSort());

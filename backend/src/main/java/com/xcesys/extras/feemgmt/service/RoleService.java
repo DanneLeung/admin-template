@@ -41,11 +41,11 @@ public interface RoleService {
      * 分页查询角色列表
      *
      * @param name     角色名称（模糊查询）
-     * @param status   角色状态
+     * @param enabled   角色状态
      * @param pageable 分页参数
      * @return 角色分页列表
      */
-    Page<Role> findRoles(String name, Integer status, Pageable pageable);
+    Page<Role> findRoles(String name, Boolean enabled, Pageable pageable);
 
     /**
      * 查询所有角色列表
@@ -89,9 +89,9 @@ public interface RoleService {
      * 更新角色状态
      *
      * @param id     角色ID
-     * @param status 状态
+     * @param enabled 状态
      */
-    void updateStatus(Long id, Integer status);
+    void updateEnabled(Long id, Boolean enabled);
 
     /**
      * 为角色分配权限

@@ -19,12 +19,12 @@ public interface DepartmentService {
     /**
      * 获取部门树形结构
      */
-    List<Department> getDepartmentTree(String name, Integer status);
+    List<Department> getDepartmentTree(String name, Boolean enabled);
 
     /**
      * 分页查询部门列表
      */
-    Page<Department> findDepartments(String name, Integer status, Pageable pageable);
+    Page<Department> findDepartments(String name, Boolean enabled, Pageable pageable);
 
     /**
      * 创建部门
@@ -44,7 +44,7 @@ public interface DepartmentService {
     /**
      * 更新部门状态
      */
-    void updateStatus(Long id, Integer status);
+    void updateEnabled(Long id, Boolean enabled);
 
     /**
      * 检查部门名称是否存在

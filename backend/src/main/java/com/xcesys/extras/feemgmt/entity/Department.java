@@ -9,8 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +17,13 @@ import java.util.List;
  * 部门实体类
  */
 @Entity
-@Table(name = "sys_department")
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE sys_department SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+@Table(name = "sys_department")
+// 移除以下两个注解
+// @SQLDelete(sql = "UPDATE sys_department SET deleted = true WHERE id = ? and version = ?")
+// @Where(clause = "deleted = false")
 public class Department extends TenantBaseEntity {
 
   /**
@@ -70,10 +69,10 @@ public class Department extends TenantBaseEntity {
   private String email;
 
   /**
-   * 部门状态（0正常 1停用）
+   * 部门状态（true 启用 false 禁用）
    */
-  @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  @Column(name = "enabled", nullable = false)
+  private Boolean enabled = true;
 
   /**
    * 父部门
@@ -97,3 +96,5 @@ public class Department extends TenantBaseEntity {
   private List<User> users = new ArrayList<>();
 
 }
+// 移除基类中的deleted字段引用
+// private Boolean deleted = false; 该字段存在于基类中需要后续处理

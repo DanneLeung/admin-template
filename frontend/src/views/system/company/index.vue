@@ -7,9 +7,9 @@
           <el-input v-model="queryParams.name" placeholder="请输入公司名称" clearable @keyup.enter="handleQuery" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
-            <el-option label="启用" :value="0" />
-            <el-option label="禁用" :value="1" />
+          <el-select v-model="queryParams.enabled" placeholder="请选择状态" clearable>
+            <el-option label="启用" :value="true" />
+            <el-option label="禁用" :value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -23,17 +23,16 @@
         <el-button type="primary" @click="handleAdd" v-hasPermi="['company:add']">新增</el-button>
       </div>
     </el-card>
-   <el-card class="mb-4">
-    
+    <el-card class="mb-4">
       <!-- 数据表格 -->
-        <el-table v-loading="loading" :data="companyList">
+      <el-table v-loading="loading" :data="companyList">
         <el-table-column label="公司名称" prop="name" />
         <el-table-column label="公司编码" prop="code" />
         <el-table-column label="域名" prop="domain" />
         <el-table-column label="状态" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.status === 0 ? 'success' : 'danger'">
-              {{ row.status === 0 ? '启用' : '禁用' }}
+            <el-tag :type="row.enabled ? 'success' : 'danger'">
+              {{ row.enabled ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -47,10 +46,10 @@
               type="primary"
               @click="handleStatus(row)"
               v-hasPermi="['company:edit']"
-            >{{ row.status === 0 ? '禁用' : '启用' }}</el-button>
+            >{{ row.enabled ? '禁用' : '启用'  }}</el-button>
           </template>
         </el-table-column>
-        </el-table>
+      </el-table>
     </el-card>
     <!-- 分页组件 -->
     <div class="mt-4 flex justify-end">
@@ -89,9 +88,9 @@
           <el-input v-model="form.domain" placeholder="请输入域名" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio :label="0">启用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
+          <el-radio-group v-model="form.enabled">
+            <el-radio :label="true">启用</el-radio>
+            <el-radio :label="false">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -115,7 +114,7 @@ const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
   name: undefined,
-  status: undefined
+  enabled: undefined
 })
 
 // 数据列表
@@ -136,7 +135,7 @@ const form = reactive({
   name: '',
   code: '',
   domain: '',
-  status: 0
+  enabled: true
 })
 
 // 表单校验规则
@@ -170,7 +169,7 @@ const handleQuery = () => {
 // 重置按钮操作
 const resetQuery = () => {
   queryParams.name = undefined
-  queryParams.status = undefined
+  queryParams.enabled = undefined
   handleQuery()
 }
 
@@ -183,7 +182,7 @@ const handleAdd = () => {
     name: '',
     code: '',
     domain: '',
-    status: 0
+    enabled: true
   })
 }
 
@@ -223,12 +222,12 @@ const handleDelete = (row) => {
 
 // 状态修改
 const handleStatus = async (row) => {
-  const text = row.status === 0 ? '禁用' : '启用'
+  const text = row.enabled ? '禁用' : '启用'
   try {
     await ElMessageBox.confirm(`确认要${text}该公司吗？`, '警告', {
       type: 'warning'
     })
-    await changeCompanyStatus(row.id, row.status === 0 ? 1 : 0)
+    await changeCompanyStatus(row.id, !row.enabled)
     ElMessage.success(`${text}成功`)
     getList()
   } catch (error) {

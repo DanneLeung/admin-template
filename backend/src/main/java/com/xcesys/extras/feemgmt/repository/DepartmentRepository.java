@@ -71,10 +71,10 @@ public interface DepartmentRepository extends JpaRepository<Department, Long>, J
   /**
    * 根据部门状态查询部门列表
    *
-   * @param status 部门状态
+   * @param enabled 部门状态
    * @return 部门列表
    */
-  List<Department> findByStatus(Integer status);
+  List<Department> findByEnabled(Boolean enabled);
 
   /**
    * 查询指定部门及其所有子部门

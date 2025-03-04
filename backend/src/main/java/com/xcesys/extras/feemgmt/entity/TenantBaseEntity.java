@@ -20,8 +20,7 @@ public abstract class TenantBaseEntity extends BaseEntity {
   /**
    * 公司ID（租户ID）
    */
-  @NotNull(message = "公司不能为空")
-  @Column(name = "company_id", nullable = false)
+  @Column(name = "company_id", nullable = true)
   private Long companyId;
 
   /**
@@ -31,4 +30,10 @@ public abstract class TenantBaseEntity extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "company_id", insertable = false, updatable = false)
   private Company company;
+
+  /**
+   * 删除标志（0代表存在 1代表删除）
+   */
+  @Column(name = "deleted", nullable = false)
+  private Boolean deleted = false;
 }

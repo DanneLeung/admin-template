@@ -56,10 +56,10 @@ public class PermissionController {
     return Result.success("删除成功");
   }
 
-  @PatchMapping("/status")
+  @PutMapping("/status")
   @PreAuthorize("hasAuthority('system:permission:edit')")
-  public Result<String> updateStatus(@RequestParam Long id, @RequestParam Integer status) {
-    permissionService.updateStatus(id, status);
+  public Result<String> updateStatus(@RequestParam("id") Long id, @RequestParam("enabled") Boolean enabled) {
+    permissionService.updateEnabled(id, enabled);
     return Result.success("更新状态成功");
   }
 }

@@ -16,9 +16,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="用户状态" clearable>
-            <el-option label="正常" :value="0" />
-            <el-option label="停用" :value="1" />
+          <el-select v-model="queryParams.enabled" placeholder="用户状态" clearable>
+            <el-option label="正常" :value="true" />
+            <el-option label="停用" :value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -50,12 +50,12 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="用户名" prop="username" />
         <el-table-column label="昵称" prop="nickname" />
-        <el-table-column label="部门" prop="department" />
+        <el-table-column label="部门" prop="departmentName" />
         <el-table-column label="公司" prop="companyName" />
         <el-table-column label="手机号码" prop="phone" />
         <el-table-column label="状态" align="center">
           <template #default="{ row }">
-            <el-switch v-model="row.status" :active-value="0" :inactive-value="1" @change="handleStatusChange(row)" />
+            <el-switch v-model="row.enabled"  @change="handleStatusChange(row)" />
           </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createTime"  />
@@ -96,7 +96,7 @@
         </el-form-item>
         <el-form-item label="公司" prop="companyId">
           <el-select v-model="userForm.companyId" placeholder="选择公司">
-            <el-option v-for="item in companyOptions" :key="item.id" :label="item.name" :value="item.id" />
+            <el-option v-for="item in companyOptions" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="部门" prop="deptId">
@@ -113,9 +113,9 @@
           <el-input v-model="userForm.password" type="password" show-password />
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="userForm.status">
-            <el-radio :value="0">正常</el-radio>
-            <el-radio :value="1">停用</el-radio>
+          <el-radio-group v-model="userForm.enabled">
+            <el-radio :value="true">启用</el-radio>
+            <el-radio :value="false">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -181,7 +181,7 @@ const queryParams = reactive({
   keyword: '',
   deptId: null,
   companyId: null,
-  status: null
+  enabled: null
 })
 
 // Dialog control
@@ -203,11 +203,11 @@ const userForm = reactive({
   username: '',
   nickname: '',
   password: '',
-  deptId: null,
   companyId: null,
+  deptId: null,
   phone: '',
   email: '',
-  status: 0
+  enabled: true
 })
 
 const roleForm = reactive({
@@ -273,7 +273,7 @@ const resetQuery = () => {
   queryParams.keyword = ''
   queryParams.deptId = null
   queryParams.companyId = null
-  queryParams.status = null
+  queryParams.enabled = null
   handleQuery()
 }
 
@@ -335,11 +335,11 @@ const handleBatchDelete = () => {
 
 const handleStatusChange = async (row) => {
   try {
-    await updateUserStatus(row.id, row.status)
+    await updateUserStatus(row.id, row.enabled)
     ElMessage.success('状态修改成功')
   } catch (error) {
     ElMessage.error('状态修改失败')
-    row.status = row.status === 0 ? 1 : 0
+    row.enabled = !row.enabled
   }
 }
 
@@ -383,7 +383,7 @@ const resetForm = () => {
     companyId: null,
     phone: '',
     email: '',
-    status: 0
+    enabled: true
   })
 }
 

@@ -56,7 +56,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
      * @param userId 用户ID
      * @return 菜单列表
      */
-    @Query("SELECT DISTINCT m FROM Menu m JOIN m.roles r JOIN r.users u WHERE u.id = :userId AND m.visible = true AND m.status = 0 ORDER BY m.sort ASC")
+    @Query("SELECT DISTINCT m FROM Menu m JOIN m.roles r JOIN r.users u WHERE u.id = :userId AND m.visible = true AND m.enabled = true ORDER BY m.sort ASC")
     List<Menu> findByUserId(@Param("userId") Long userId);
     
     /**

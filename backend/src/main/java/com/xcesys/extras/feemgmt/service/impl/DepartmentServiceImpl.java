@@ -33,15 +33,15 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public List<Department> getDepartmentTree(String name, Integer status) {
+  public List<Department> getDepartmentTree(String name, Boolean enabled) {
     // 查询所有部门
     List<Department> allDepts = departmentRepository.findAll((Specification<Department>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
       if (StringUtils.isNotBlank(name)) {
         predicates.add(cb.like(root.get("name"), "%" + name + "%"));
       }
-      if (status != null) {
-        predicates.add(cb.equal(root.get("status"), status));
+      if (enabled != null) {
+        predicates.add(cb.equal(root.get("enabled"), enabled));
       }
       return cb.and(predicates.toArray(new Predicate[0]));
     });
@@ -51,14 +51,14 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
-  public Page<Department> findDepartments(String name, Integer status, Pageable pageable) {
+  public Page<Department> findDepartments(String name, Boolean enabled, Pageable pageable) {
     return departmentRepository.findAll((Specification<Department>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
       if (StringUtils.isNotBlank(name)) {
         predicates.add(cb.like(root.get("name"), "%" + name + "%"));
       }
-      if (status != null) {
-        predicates.add(cb.equal(root.get("status"), status));
+      if (enabled != null) {
+        predicates.add(cb.equal(root.get("enabled"), enabled));
       }
       return cb.and(predicates.toArray(new Predicate[0]));
     }, pageable);
@@ -84,7 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     existingDept.setLeader(department.getLeader());
     existingDept.setPhone(department.getPhone());
     existingDept.setEmail(department.getEmail());
-    existingDept.setStatus(department.getStatus());
+    existingDept.setEnabled(department.getEnabled());
 
     return departmentRepository.save(existingDept);
   }
@@ -104,14 +104,14 @@ public class DepartmentServiceImpl implements DepartmentService {
       throw new BusinessException("部门下存在用户，无法删除");
     }
 
-    departmentRepository.deleteById(id);
+    departmentRepository.delete(department);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void updateStatus(Long id, Integer status) {
+  public void updateEnabled(Long id, Boolean enabled) {
     Department department = findById(id);
-    department.setStatus(status);
+    department.setEnabled(enabled);
     departmentRepository.save(department);
   }
 
@@ -156,7 +156,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     // 检查父部门是否存在
     if (department.getParentId() != null) {
       Department parent = findById(department.getParentId());
-      if (Objects.equals(parent.getStatus(), 1)) {
+      if (Objects.equals(parent.getEnabled(), Boolean.FALSE)) {
         throw new BusinessException("父部门已停用，无法添加子部门");
       }
     }

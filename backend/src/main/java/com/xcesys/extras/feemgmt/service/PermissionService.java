@@ -99,9 +99,9 @@ public interface PermissionService {
      * 更新权限状态
      *
      * @param id     权限ID
-     * @param status 状态
+     * @param enabled 状态
      */
-    void updateStatus(Long id, Integer status);
+    void updateEnabled(Long id, Boolean enabled);
 
     /**
      * 判断权限编码是否存在

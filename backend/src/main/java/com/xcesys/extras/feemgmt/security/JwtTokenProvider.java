@@ -123,7 +123,7 @@ public class JwtTokenProvider {
             .collect(Collectors.toList());
 
     Long companyId = claims.containsKey("companyId") ? Long.valueOf(claims.get("companyId").toString()) : null;
-    UserDetails principal = new UserDetailsImpl((Long.valueOf(claims.get("id").toString())), claims.getSubject(), "", 0, companyId, authorities);
+    UserDetails principal = new UserDetailsImpl((Long.valueOf(claims.get("id").toString())), claims.getSubject(), "", Boolean.TRUE, companyId, authorities);
 
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }

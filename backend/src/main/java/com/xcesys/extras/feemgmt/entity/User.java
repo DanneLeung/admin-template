@@ -1,24 +1,13 @@
 package com.xcesys.extras.feemgmt.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -32,8 +21,9 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name = "sys_user")
-@SQLDelete(sql = "UPDATE sys_user SET deleted = true WHERE id = ?")
-@SQLRestriction(value = "deleted = false")
+// 移除以下软删除注解
+// @SQLDelete(sql = "UPDATE sys_user SET deleted = true WHERE id = ? and version = ?")
+// @SQLRestriction(value = "deleted = false")
 public class User extends TenantBaseEntity {
 
   /**
@@ -46,8 +36,11 @@ public class User extends TenantBaseEntity {
    * 用户所属部门
    */
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "dept_id")
+  @JoinColumn(name = "dept_id", insertable = false, updatable = false)
   private Department department;
+
+  @Column(name = "dept_id")
+  private Long departmentId;
   /**
    * 用户邮箱
    */
@@ -109,10 +102,10 @@ public class User extends TenantBaseEntity {
   )
   private Set<Role> roles = new HashSet<>();
   /**
-   * 帐号状态（0正常 1停用）
+   * 帐号状态（true 启用 false 禁用）
    */
-  @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  @Column(name = "enabled", nullable = false)
+  private Boolean enabled = true;
   /**
    * 用户名
    */

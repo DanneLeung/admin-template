@@ -35,9 +35,9 @@ public class CompanyController {
   @PreAuthorize("hasAuthority('system:company:list')")
   public Result<Page<Company>> listCompanies(
       @RequestParam(required = false) String name,
-      @RequestParam(required = false) Integer status,
+      @RequestParam(required = false) Boolean enabled,
       Pageable pageable) {
-    Page<Company> page = companyService.findCompanies(name, status, pageable);
+    Page<Company> page = companyService.findCompanies(name, enabled, pageable);
     return Result.success(page);
   }
 
@@ -73,11 +73,11 @@ public class CompanyController {
   /**
    * 更新公司状态
    */
-  @PutMapping("/{id}/status")
+  @PutMapping("/status")
   @PreAuthorize("hasAuthority('system:company:edit')")
-  public Result<Void> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
-    companyService.updateStatus(id, status);
-    return Result.success();
+  public Result<String> updateStatus(@RequestParam("id") Long id, @RequestParam("enabled") Boolean enabled) {
+    companyService.updateEnabled(id, enabled);
+    return Result.success("更新状态成功");
   }
 
   /**

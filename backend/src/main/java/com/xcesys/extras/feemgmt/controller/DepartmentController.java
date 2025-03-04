@@ -37,8 +37,8 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('system:department:list')")
   public Result<List<Department>> getDepartmentTree(
       @RequestParam(required = false) String name,
-      @RequestParam(required = false) Integer status) {
-    List<Department> tree = departmentService.getDepartmentTree(name, status);
+      @RequestParam(required = false) Boolean enabled) {
+    List<Department> tree = departmentService.getDepartmentTree(name, enabled);
     return Result.success(tree);
   }
 
@@ -49,9 +49,9 @@ public class DepartmentController {
   @PreAuthorize("hasAuthority('system:department:list')")
   public Result<Page<Department>> listDepartments(
       @RequestParam(required = false) String name,
-      @RequestParam(required = false) Integer status,
+      @RequestParam(required = false) Boolean enabled,
       Pageable pageable) {
-    Page<Department> page = departmentService.findDepartments(name, status, pageable);
+    Page<Department> page = departmentService.findDepartments(name, enabled, pageable);
     return Result.success(page);
   }
 
@@ -87,10 +87,10 @@ public class DepartmentController {
   /**
    * 更新部门状态
    */
-  @PutMapping("/{id}/status")
+  @PutMapping("/status")
   @PreAuthorize("hasAuthority('system:department:edit')")
-  public Result<Void> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
-    departmentService.updateStatus(id, status);
+  public Result<String> updateStatus(@RequestParam("id") Long id, @RequestParam("enabled") Boolean enabled) {
+    departmentService.updateEnabled(id, enabled);
     return Result.success();
   }
 

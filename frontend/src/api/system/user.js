@@ -66,11 +66,11 @@ export function batchDeleteUsers(ids) {
 }
 
 // Update user status
-export function updateUserStatus(id, status) {
+export function updateUserStatus(id, enabled) {
   return request({
     url: userApi.updateStatus,
-    method: 'patch',
-    data: { id, status }
+    method: 'put',
+    params: { id, enabled}
   })
 }
 

@@ -53,11 +53,11 @@ export function delDepartment(deptId) {
 }
 
 // 更新部门状态
-export function updateDepartmentStatus(deptId, status) {
+export function updateDepartmentStatus(id, enabled) {
   return request({
-    url: `/department/${deptId}/status`,
+    url: `/department/status`,
     method: 'put',
-    params: { status }
+    params: { id, enabled}
   })
 }
 

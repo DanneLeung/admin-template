@@ -24,7 +24,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE sys_permission SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE sys_permission SET deleted = true WHERE id = ? and version = ?")
 @Where(clause = "deleted = false")
 public class Permission extends BaseEntity {
 
@@ -51,10 +51,10 @@ public class Permission extends BaseEntity {
   private Integer type;
 
   /**
-   * 权限状态（0正常 1停用）
+   * 权限状态（true 启用 false 禁用）
    */
-  @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  @Column(name = "enabled", nullable = false)
+  private Boolean enabled = true;
 
   /**
    * 权限描述

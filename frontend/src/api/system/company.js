@@ -44,11 +44,11 @@ export function delCompany(id) {
 }
 
 // 修改公司状态
-export function changeCompanyStatus(id, status) {
+export function changeCompanyStatus(id, enabled) {
   return request({
-    url: `/companies/${id}/status`,
+    url: `/companies/status`,
     method: 'put',
-    params: { status }
+    params: { id, enabled}
   })
 }
 
