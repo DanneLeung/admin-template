@@ -9,7 +9,8 @@ const userApi = {
   delete: '/user/',
   batchDelete: '/user/batch',
   updateStatus: '/user/status',
-  assignRoles: '/user/roles'
+  assignRoles: '/user/roles',
+  companies: '/companies' // 添加公司列表接口
 }
 
 // Get user list with pagination and filters
@@ -79,5 +80,13 @@ export function assignUserRoles(data) {
     url: userApi.assignRoles,
     method: 'post',
     data
+  })
+}
+
+// Get company list
+export function getCompanyList() {
+  return request({
+    url: userApi.companies,
+    method: 'get'
   })
 }

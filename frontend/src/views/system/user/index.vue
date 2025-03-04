@@ -4,21 +4,16 @@
     <el-card class="mb-4">
       <el-form :inline="true" :model="queryParams" class="search-form">
         <el-form-item label="关键字">
-          <el-input
-            v-model="queryParams.keyword"
-            placeholder="用户名/昵称/手机号"
-            clearable
-            @keyup.enter="handleQuery"
-          />
+          <el-input v-model="queryParams.keyword" placeholder="用户名/昵称/手机号" clearable @keyup.enter="handleQuery" />
         </el-form-item>
         <el-form-item label="部门">
-          <el-tree-select
-            v-model="queryParams.deptId"
-            :data="deptOptions"
-            placeholder="选择部门"
-            clearable
-            :props="{ label: 'name', value: 'id' }"
-          />
+          <el-tree-select v-model="queryParams.deptId" :data="deptOptions" placeholder="选择部门" clearable
+            :props="{ label: 'name', value: 'id' }" />
+        </el-form-item>
+        <el-form-item label="公司">
+          <el-select v-model="queryParams.companyId" placeholder="选择公司" clearable>
+            <el-option v-for="item in companyOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="queryParams.status" placeholder="用户状态" clearable>
@@ -27,88 +22,86 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="resetQuery">重置</el-button>
+          <el-button type="primary" @click="handleQuery">
+            <el-icon><Search /></el-icon>
+            查询
+          </el-button>
+          <el-button @click="resetQuery">
+            <el-icon><Refresh /></el-icon>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
       <div class="action-buttons">
-        <el-button type="primary" @click="handleAdd">新增用户</el-button>
-        <el-button type="danger" :disabled="!selectedUsers.length" @click="handleBatchDelete">批量删除</el-button>
+        <el-button type="primary" @click="handleAdd">
+            <el-icon><Plus /></el-icon>
+            新增用户
+          </el-button>
+        <el-button type="danger" :disabled="!selectedUsers.length" @click="handleBatchDelete">
+            <el-icon><Delete /></el-icon>
+            批量删除
+          </el-button>
       </div>
     </el-card>
     <el-card>
 
-    <!-- User Table -->
-      <el-table
-      v-loading="loading"
-      :data="userList"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户名" prop="username" />
-      <el-table-column label="昵称" prop="nickname" />
-      <el-table-column label="部门" prop="department" />
-      <el-table-column label="手机号码" prop="phone" />
-      <el-table-column label="状态" align="center">
-        <template #default="{ row }">
-          <el-switch
-            v-model="row.status"
-            :active-value="0"
-            :inactive-value="1"
-            @change="handleStatusChange(row)"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" prop="createTime" width="180" />
-      <el-table-column label="操作" width="200" align="center">
-        <template #default="{ row }">
-          <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-          <el-button link type="primary" @click="handleAssignRole(row)">分配角色</el-button>
-          <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
-        </template>
-      </el-table-column>
+      <!-- User Table -->
+      <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="用户名" prop="username" />
+        <el-table-column label="昵称" prop="nickname" />
+        <el-table-column label="部门" prop="department" />
+        <el-table-column label="公司" prop="companyName" />
+        <el-table-column label="手机号码" prop="phone" />
+        <el-table-column label="状态" align="center">
+          <template #default="{ row }">
+            <el-switch v-model="row.status" :active-value="0" :inactive-value="1" @change="handleStatusChange(row)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="createTime"  />
+        <el-table-column label="操作" width="300" align="center">
+          <template #default="{ row }">
+            <el-button link type="primary" @click="handleEdit(row)">
+            <el-icon><Edit /></el-icon>
+            编辑
+          </el-button>
+            <el-button link type="primary" @click="handleAssignRole(row)">
+            <el-icon><User /></el-icon>
+            分配角色
+          </el-button>
+            <el-button link type="danger" @click="handleDelete(row)">
+            <el-icon><Delete /></el-icon>
+            删除
+          </el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
 
     <!-- Pagination -->
     <div class="pagination-container">
-      <el-pagination
-        v-model:current-page="queryParams.pageNum"
-        v-model:page-size="queryParams.pageSize"
-        :page-sizes="[10, 20, 50, 100]"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination v-model:current-page="queryParams.pageNum" v-model:page-size="queryParams.pageSize"
+        :page-sizes="[10, 20, 50, 100]" :total="total" layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <!-- User Dialog -->
-    <el-dialog
-      :title="dialog.title"
-      v-model="dialog.visible"
-      width="600px"
-      @close="resetForm"
-    >
-      <el-form
-        ref="userFormRef"
-        :model="userForm"
-        :rules="userRules"
-        label-width="100px"
-      >
+    <el-dialog :title="dialog.title" v-model="dialog.visible" width="600px" @close="resetForm">
+      <el-form ref="userFormRef" :model="userForm" :rules="userRules" label-width="100px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username" :disabled="dialog.type === 'edit'" />
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="userForm.nickname" />
         </el-form-item>
+        <el-form-item label="公司" prop="companyId">
+          <el-select v-model="userForm.companyId" placeholder="选择公司">
+            <el-option v-for="item in companyOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="部门" prop="deptId">
-          <el-tree-select
-            v-model="userForm.deptId"
-            :data="deptOptions"
-            placeholder="选择部门"
-            :props="{ label: 'name', value: 'id' }"
-          />
+          <el-tree-select v-model="userForm.deptId" :data="deptOptions" placeholder="选择部门"
+            :props="{ label: 'name', value: 'id' }" />
         </el-form-item>
         <el-form-item label="手机号码" prop="phone">
           <el-input v-model="userForm.phone" />
@@ -128,26 +121,24 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialog.visible = false">取消</el-button>
-          <el-button type="primary" @click="handleSubmit">确定</el-button>
+          <el-button @click="dialog.visible = false">
+            <el-icon><Close /></el-icon>
+            取消
+          </el-button>
+          <el-button type="primary" @click="handleSubmit">
+            <el-icon><Check /></el-icon>
+            确定
+          </el-button>
         </div>
       </template>
     </el-dialog>
 
     <!-- Role Assignment Dialog -->
-    <el-dialog
-      title="分配角色"
-      v-model="roleDialog.visible"
-      width="500px"
-    >
+    <el-dialog title="分配角色" v-model="roleDialog.visible" width="500px">
       <el-form :model="roleForm">
         <el-form-item label="角色列表">
           <el-checkbox-group v-model="roleForm.roleIds">
-            <el-checkbox
-              v-for="role in roleOptions"
-              :key="role.id"
-              :label="role.id"
-            >
+            <el-checkbox v-for="role in roleOptions" :key="role.id" :label="role.id">
               {{ role.name }}
             </el-checkbox>
           </el-checkbox-group>
@@ -155,8 +146,14 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="roleDialog.visible = false">取消</el-button>
-          <el-button type="primary" @click="handleRoleSubmit">确定</el-button>
+          <el-button @click="roleDialog.visible = false">
+            <el-icon><Close /></el-icon>
+            取消
+          </el-button>
+          <el-button type="primary" @click="handleRoleSubmit">
+            <el-icon><Check /></el-icon>
+            确定
+          </el-button>
         </div>
       </template>
     </el-dialog>
@@ -166,7 +163,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getUserList, createUser, updateUser, deleteUser, batchDeleteUsers, updateUserStatus, assignUserRoles } from '@/api/system/user'
+import { getUserList, createUser, updateUser, deleteUser, batchDeleteUsers, updateUserStatus, assignUserRoles, getCompanyList } from '@/api/system/user'
 
 // Data
 const loading = ref(false)
@@ -175,6 +172,7 @@ const total = ref(0)
 const selectedUsers = ref([])
 const deptOptions = ref([])
 const roleOptions = ref([])
+const companyOptions = ref([])
 
 // Query params
 const queryParams = reactive({
@@ -182,6 +180,7 @@ const queryParams = reactive({
   pageSize: 10,
   keyword: '',
   deptId: null,
+  companyId: null,
   status: null
 })
 
@@ -205,6 +204,7 @@ const userForm = reactive({
   nickname: '',
   password: '',
   deptId: null,
+  companyId: null,
   phone: '',
   email: '',
   status: 0
@@ -228,6 +228,9 @@ const userRules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
   ],
+  companyId: [
+    { required: true, message: '请选择公司', trigger: 'change' }
+  ],
   phone: [
     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
   ],
@@ -250,14 +253,26 @@ const getList = async () => {
   }
 }
 
+// 获取公司列表
+const getCompanies = async () => {
+  try {
+    const res = await getCompanyList()
+    companyOptions.value = res.data.content
+  } catch (error) {
+    ElMessage.error('获取公司列表失败')
+  }
+}
+
 const handleQuery = () => {
   queryParams.pageNum = 1
   getList()
 }
 
+// 重置查询参数
 const resetQuery = () => {
   queryParams.keyword = ''
   queryParams.deptId = null
+  queryParams.companyId = null
   queryParams.status = null
   handleQuery()
 }
@@ -365,6 +380,7 @@ const resetForm = () => {
     nickname: '',
     password: '',
     deptId: null,
+    companyId: null,
     phone: '',
     email: '',
     status: 0
@@ -374,8 +390,7 @@ const resetForm = () => {
 // Initialize
 onMounted(() => {
   getList()
-  // TODO: Get department options
-  // TODO: Get role options
+  getCompanies()
 })
 </script>
 

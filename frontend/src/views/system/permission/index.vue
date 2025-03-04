@@ -26,8 +26,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="resetQuery">重置</el-button>
+          <el-button type="primary" @click="handleQuery">
+            <el-icon><Search /></el-icon>
+            查询
+          </el-button>
+          <el-button @click="resetQuery">
+            <el-icon><Refresh /></el-icon>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -41,7 +47,19 @@
             type="primary"
             @click="handleAdd"
             v-if="hasPermission('system:permission:add')"
-          >新增</el-button>
+          >
+            <el-icon><Plus /></el-icon>
+            新增
+          </el-button>
+          <el-button
+            type="danger"
+            @click="handleBatchDelete"
+            v-if="hasPermission('system:permission:delete')"
+            :disabled="!selectedPermissions.length"
+          >
+            <el-icon><Delete /></el-icon>
+            批量删除
+          </el-button>
         </div>
       </template>
 
@@ -50,32 +68,40 @@
         :data="permissionList"
         border
         style="width: 100%"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="50" />
         <el-table-column prop="name" label="权限名称" />
         <el-table-column prop="code" label="权限标识" />
         <el-table-column prop="description" label="权限描述" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="{ row }">
             <el-tag :type="row.status === 0 ? 'success' : 'danger'">
               {{ row.status === 0 ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="{ row }">
             <el-button
               type="primary"
               link
               @click="handleEdit(row)"
               v-if="hasPermission('system:permission:edit')"
-            >编辑</el-button>
-            <el-button
+            >
+            <el-icon><Edit /></el-icon>
+            编辑
+          </el-button>
+          <el-button
               type="danger"
               link
               @click="handleDelete(row)"
               v-if="hasPermission('system:permission:delete')"
-            >删除</el-button>
+            >
+            <el-icon><Delete /></el-icon>
+            删除
+          </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -126,8 +152,14 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialog.visible = false">取 消</el-button>
-          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="dialog.visible = false">
+            <el-icon><Close /></el-icon>
+            取 消
+          </el-button>
+          <el-button type="primary" @click="submitForm">
+            <el-icon><Check /></el-icon>
+            确 定
+          </el-button>
         </div>
       </template>
     </el-dialog>
@@ -148,6 +180,7 @@ const hasPermission = userStore.hasPermission
 const loading = ref(false)
 const permissionList = ref([])
 const total = ref(0)
+const selectedPermissions = ref([])
 
 // Query params
 const queryParams = reactive({
@@ -294,6 +327,25 @@ const handleDelete = (row) => {
       ElMessage.error('删除失败')
     }
   })
+}
+
+const handleBatchDelete = () => {
+  ElMessageBox.confirm('是否确认删除选中的权限?', '警告', {
+    type: 'warning'
+  }).then(async () => {
+    try {
+      // TODO: Implement API call
+      // await batchDeletePermissions(selectedPermissions.value.map(item => item.id))
+      ElMessage.success('批量删除成功')
+      getList()
+    } catch (error) {
+      ElMessage.error('批量删除失败')
+    }
+  })
+}
+
+const handleSelectionChange = (selection) => {
+  selectedPermissions.value = selection
 }
 
 onMounted(() => {

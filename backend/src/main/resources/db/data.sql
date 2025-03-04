@@ -1,34 +1,42 @@
--- 清除现有数据
-DELETE FROM sys_user_role;
-DELETE FROM sys_role_permission;
-DELETE FROM sys_user;
-DELETE FROM sys_role;
-DELETE FROM sys_permission;
+-- 禁用外键检查
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 清除现有数据并重置自增ID
+TRUNCATE TABLE sys_user_role;
+TRUNCATE TABLE sys_role_permission;
+TRUNCATE TABLE sys_user;
+TRUNCATE TABLE sys_role;
+TRUNCATE TABLE sys_permission;
 
 -- 创建权限
+
 INSERT INTO sys_permission (name, code, type, status, create_time, update_time, deleted) VALUES
 ('公司查询', 'system:company:list', 1, 0, NOW(), NOW(), false),
 ('公司新增', 'system:company:add', 1, 0, NOW(), NOW(), false),
 ('公司编辑', 'system:company:edit', 1, 0, NOW(), NOW(), false),
-('公司删除', 'system:company:remove', 1, 0, NOW(), NOW(), false),
+('公司删除', 'system:company:delete', 1, 0, NOW(), NOW(), false),
+('部门查询', 'system:department:list', 1, 0, NOW(), NOW(), false),
+('部门新增', 'system:department:add', 1, 0, NOW(), NOW(), false),
+('部门编辑', 'system:department:edit', 1, 0, NOW(), NOW(), false),
+('部门删除', 'system:department:delete', 1, 0, NOW(), NOW(), false),
 ('用户查询', 'system:user:list', 1, 0, NOW(), NOW(), false),
 ('用户新增', 'system:user:add', 1, 0, NOW(), NOW(), false),
 ('用户编辑', 'system:user:edit', 1, 0, NOW(), NOW(), false),
-('用户删除', 'system:user:remove', 1, 0, NOW(), NOW(), false),
+('用户删除', 'system:user:delete', 1, 0, NOW(), NOW(), false),
 ('用户导出', 'system:user:export', 1, 0, NOW(), NOW(), false),
 ('重置密码', 'system:user:resetPwd', 1, 0, NOW(), NOW(), false),
 ('角色查询', 'system:role:list', 1, 0, NOW(), NOW(), false),
 ('角色新增', 'system:role:add', 1, 0, NOW(), NOW(), false),
 ('角色编辑', 'system:role:edit', 1, 0, NOW(), NOW(), false),
-('角色删除', 'system:role:remove', 1, 0, NOW(), NOW(), false),
+('角色删除', 'system:role:delete', 1, 0, NOW(), NOW(), false),
 ('菜单查询', 'system:menu:list', 1, 0, NOW(), NOW(), false),
 ('菜单新增', 'system:menu:add', 1, 0, NOW(), NOW(), false),
 ('菜单编辑', 'system:menu:edit', 1, 0, NOW(), NOW(), false),
-('菜单删除', 'system:menu:remove', 1, 0, NOW(), NOW(), false),
+('菜单删除', 'system:menu:delete', 1, 0, NOW(), NOW(), false),
 ('权限查询', 'system:permission:list', 1, 0, NOW(), NOW(), false),
 ('权限新增', 'system:permission:add', 1, 0, NOW(), NOW(), false),
 ('权限编辑', 'system:permission:edit', 1, 0, NOW(), NOW(), false),
-('权限删除', 'system:permission:remove', 1, 0, NOW(), NOW(), false)
+('权限删除', 'system:permission:delete', 1, 0, NOW(), NOW(), false)
 ;
 
 -- 创建角色
@@ -62,3 +70,5 @@ INSERT INTO sys_user_role (user_id, role_id) VALUES
 (1, 1), -- admin -> 超级管理员
 (2, 2), -- test -> 普通用户
 (3, 3); -- guest -> 访客
+
+SET FOREIGN_KEY_CHECKS = 1;

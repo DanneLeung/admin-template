@@ -1,5 +1,6 @@
 package com.xcesys.extras.feemgmt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -77,6 +78,7 @@ public class Department extends TenantBaseEntity {
   /**
    * 父部门
    */
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id", insertable = false, updatable = false)
   private Department parent;

@@ -8,7 +8,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     }
   },
-  plugins: [vue()],
+  plugins: [vue({
+      devtools: process.env.NODE_ENV !== 'production'
+    })],
   base: './',
   server: {
     port: 5173,

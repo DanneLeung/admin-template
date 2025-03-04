@@ -1,5 +1,6 @@
 package com.xcesys.extras.feemgmt.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,14 +20,14 @@ public abstract class TenantBaseEntity extends BaseEntity {
   /**
    * 公司ID（租户ID）
    */
-  @NotNull(message = "公司ID不能为空")
+  @NotNull(message = "公司不能为空")
   @Column(name = "company_id", nullable = false)
   private Long companyId;
 
   /**
    * 用户所属公司
    */
-  @NotNull(message = "公司不能为空")
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "company_id", insertable = false, updatable = false)
   private Company company;

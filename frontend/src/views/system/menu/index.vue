@@ -18,12 +18,18 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="resetQuery">重置</el-button>
+          <el-button type="primary" @click="handleQuery">
+            <el-icon><Search /></el-icon>
+            查询
+          </el-button>
+          <el-button @click="resetQuery">
+            <el-icon><Refresh /></el-icon>
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
       <div class="action-buttons">
-        <el-button type="primary" @click="handleAdd">新增菜单</el-button>
+        <el-button type="primary" @click="handleAdd">\n            <el-icon><Plus /></el-icon>\n            新增菜单\n          </el-button>
       </div>
     </div>
 
@@ -65,9 +71,18 @@
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template #default="{ row }">
-          <el-button link type="primary" @click="handleAdd(row)">新增</el-button>
-          <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-          <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-button link type="primary" @click="handleAdd(row)">
+            <el-icon><Plus /></el-icon>
+            新增
+          </el-button>
+          <el-button link type="primary" @click="handleEdit(row)">
+            <el-icon><Edit /></el-icon>
+            编辑
+          </el-button>
+          <el-button link type="danger" @click="handleDelete(row)">
+            <el-icon><Delete /></el-icon>
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,8 +143,14 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialog.visible = false">取消</el-button>
-          <el-button type="primary" @click="handleSubmit">确定</el-button>
+          <el-button @click="dialog.visible = false">
+            <el-icon><Close /></el-icon>
+            取消
+          </el-button>
+          <el-button type="primary" @click="handleSubmit">
+            <el-icon><Check /></el-icon>
+            确定
+          </el-button>
         </div>
       </template>
     </el-dialog>

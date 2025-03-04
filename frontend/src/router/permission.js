@@ -14,6 +14,12 @@ export const asyncRoutes = [
         meta: { title: '公司管理', permissions: ['system:company:list'] }
       },
       {
+        path: 'department',
+        name: 'Department',
+        component: () => import('@/views/system/department/index.vue'),
+        meta: { title: '部门管理', permissions: ['system:department:list'] }
+      },
+      {
         path: 'user',
         name: 'User',
         component: () => import('@/views/system/user/index.vue'),

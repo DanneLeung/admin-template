@@ -1,63 +1,65 @@
 <template>
   <div class="role-container">
     <!-- Search and Action Bar -->
-    <div class="action-bar">
-      <el-form :inline="true" :model="queryParams" class="search-form">
-        <el-form-item label="角色名称">
-          <el-input
-            v-model="queryParams.name"
-            placeholder="请输入角色名称"
-            clearable
-            @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="角色状态" clearable>
-            <el-option label="正常" :value="0" />
-            <el-option label="停用" :value="1" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="action-buttons">
-        <el-button type="primary" @click="handleAdd">新增角色</el-button>
-        <el-button type="danger" :disabled="!selectedRoles.length" @click="handleBatchDelete">批量删除</el-button>
+    <el-card class="mb-4">
+      <div class="action-bar">
+        <el-form :inline="true" :model="queryParams" class="search-form">
+          <el-form-item label="角色名称">
+            <el-input
+              v-model="queryParams.name"
+              placeholder="请输入角色名称"
+              clearable
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="queryParams.status" placeholder="角色状态" clearable>
+              <el-option label="正常" :value="0" />
+              <el-option label="停用" :value="1" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="handleQuery">查询</el-button>
+            <el-button @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+        <div class="action-buttons">
+          <el-button type="primary" @click="handleAdd">新增角色</el-button>
+          <el-button type="danger" :disabled="!selectedRoles.length" @click="handleBatchDelete">批量删除</el-button>
+        </div>
       </div>
-    </div>
-
+    </el-card>
+    <el-card>
     <!-- Role Table -->
-    <el-table
-      v-loading="loading"
-      :data="roleList"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色名称" prop="name" />
-      <el-table-column label="角色编码" prop="code" />
-      <el-table-column label="显示顺序" prop="sort" width="100" />
-      <el-table-column label="状态" align="center" width="100">
-        <template #default="{ row }">
-          <el-switch
-            v-model="row.status"
-            :active-value="0"
-            :inactive-value="1"
-            @change="handleStatusChange(row)"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" prop="createTime" width="180" />
-      <el-table-column label="操作" width="250" align="center">
-        <template #default="{ row }">
-          <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-          <el-button link type="primary" @click="handlePermission(row)">分配权限</el-button>
-          <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
+      <el-table
+        v-loading="loading"
+        :data="roleList"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="角色名称" prop="name" />
+        <el-table-column label="角色编码" prop="code" />
+        <el-table-column label="显示顺序" prop="sort" width="100" />
+        <el-table-column label="状态" align="center" width="100">
+          <template #default="{ row }">
+            <el-switch
+              v-model="row.status"
+              :active-value="0"
+              :inactive-value="1"
+              @change="handleStatusChange(row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="createTime" width="180" />
+        <el-table-column label="操作"  width="300" align="center">
+          <template #default="{ row }">
+            <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
+            <el-button link type="primary" @click="handlePermission(row)">分配权限</el-button>
+            <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
     <!-- Pagination -->
     <div class="pagination-container">
       <el-pagination
@@ -358,7 +360,6 @@ onMounted(() => {
 }
 
 .action-bar {
-  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;

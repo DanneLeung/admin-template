@@ -204,7 +204,7 @@ public class UserController {
    * @return 删除结果
    */
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasAuthority('system:user:remove')")
+  @PreAuthorize("hasAuthority('system:user:delete')")
   public Result<String> deleteUser(@PathVariable Long id) {
     userService.deleteUser(id);
     return Result.success("删除成功");
@@ -217,7 +217,7 @@ public class UserController {
    * @return 删除结果
    */
   @DeleteMapping("/batch")
-  @PreAuthorize("hasAuthority('system:user:remove')")
+  @PreAuthorize("hasAuthority('system:user:delete')")
   public Result<String> batchDeleteUsers(@RequestBody List<Long> ids) {
     ids.forEach(userService::deleteUser);
     return Result.success("批量删除成功");

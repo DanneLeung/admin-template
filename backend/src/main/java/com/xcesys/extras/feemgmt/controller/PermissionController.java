@@ -43,14 +43,14 @@ public class PermissionController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasAuthority('system:permission:remove')")
+  @PreAuthorize("hasAuthority('system:permission:delete')")
   public Result<String> delete(@PathVariable Long id) {
     permissionService.deletePermission(id);
     return Result.success("删除成功");
   }
 
   @DeleteMapping("/batch")
-  @PreAuthorize("hasAuthority('system:permission:remove')")
+  @PreAuthorize("hasAuthority('system:permission:delete')")
   public Result<String> batchDelete(@RequestBody List<Long> ids) {
     permissionService.deleteAll(ids);
     return Result.success("删除成功");

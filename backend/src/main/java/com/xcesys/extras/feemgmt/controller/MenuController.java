@@ -137,7 +137,7 @@ public class MenuController {
      * @return 删除结果
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('system:menu:remove')")
+    @PreAuthorize("hasAuthority('system:menu:delete')")
     public Result<String> deleteMenu(@PathVariable Long id) {
         menuService.deleteMenu(id);
         return Result.success("删除成功");

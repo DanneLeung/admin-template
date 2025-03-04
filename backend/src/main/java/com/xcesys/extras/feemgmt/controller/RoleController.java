@@ -177,7 +177,7 @@ public class RoleController {
      * @return 删除结果
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('system:role:remove')")
+    @PreAuthorize("hasAuthority('system:role:delete')")
     public Result<String> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
         return Result.success("删除成功");
@@ -190,7 +190,7 @@ public class RoleController {
      * @return 删除结果
      */
     @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('system:role:remove')")
+    @PreAuthorize("hasAuthority('system:role:delete')")
     public Result<String> batchDeleteRoles(@RequestBody List<Long> ids) {
         ids.forEach(roleService::deleteRole);
         return Result.success("批量删除成功");
